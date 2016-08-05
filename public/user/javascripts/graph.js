@@ -50,17 +50,19 @@ function idIndex(a, id) {
 
 
 function drawGraph(dataset) {
+    var w = 2000, h =2000;
 
     var force = d3.layout.force()
         .nodes(dataset.nodes)
         .links(dataset.links)
-        .size([600, 600])
+        .size([w, h])
         .linkDistance([190])
         .charge([-600])
         .start();
 
-    var w = 1000, h =1000;
+    
 
+    // scale graph
     d3.select("#graph").select("svg")
              //better to keep the viewBox dimensions with variables
             .attr("viewBox", "0 0 " + w + " " + h )
