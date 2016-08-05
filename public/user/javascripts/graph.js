@@ -59,6 +59,13 @@ function drawGraph(dataset) {
         .charge([-600])
         .start();
 
+    var w = 1000, h =1000;
+
+    d3.select("#graph").select("svg")
+             //better to keep the viewBox dimensions with variables
+            .attr("viewBox", "0 0 " + w + " " + h )
+            .attr("preserveAspectRatio", "xMidYMid meet");
+
 
     var links = d3.select("#graph").select("svg").selectAll("line")
         .data(dataset.links)

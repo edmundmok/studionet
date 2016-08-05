@@ -15,6 +15,7 @@ var modules = require('./routes/modules');
 var moderators = require('./routes/moderators');
 var uploads = require('./routes/uploads');
 var all = require('./routes/all');
+var contributions = require('./routes/contributions');
 
 
 var app = express();
@@ -53,6 +54,7 @@ app.use('/api/users', users);
 app.use('/api/modules', modules);
 app.use('/api/moderators', moderators);
 app.use('/uploads', uploads);
+app.use('/api/contributions', contributions);
 
 
 // catch 404 and forward to error handler
