@@ -67,15 +67,16 @@ function drawGraph(dataset) {
             .attr("preserveAspectRatio", "xMidYMid meet")
             /*.on("click", function(){
                 force.nodes(dataset.nodes.push({
-                    id: 10000+dataset.nodes.length,
+                    id: 10000+dataset.nodes.length + "",
                     label: 'test label',
                     title: 'Test Click',
                     x: d3.mouse(this)[0],
                     y: d3.mouse(this)[1]
                 }));
+                d3.select("svg").remove();
                 drawGraph(dataset)
 
-            });*/
+            })*/
              .call(d3.behavior.zoom().on("zoom", function () {
                 svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
               }))
@@ -98,11 +99,13 @@ function drawGraph(dataset) {
         .style("stroke-width", 1);
 
 
+        var readyToLink = false;
+        var sourceNode = 1, targetNode = 2;
     var nodes = svg.selectAll("g")
         .data(dataset.nodes)
         .enter()
         .append("g")
-        .on("click", function(){
+        .on("click", function(d){
             d3.event.stopPropagation();
         });
 
@@ -111,8 +114,25 @@ function drawGraph(dataset) {
         .style("fill", function(d, i) {
             return color(d["label"]);
         })
-        .on("click", function(){
+        .on("click", function(d){
             d3.event.stopPropagation();
+
+            if (readyToLink === false){
+            sourceNode=d;
+            console.log(d);
+            readyToLink = true;
+        } else{
+            targetNode = d;
+            console.log("targeNode: "+targetNode);
+            force.links(dataset.links.push({
+                source: sourceNode,
+                target: targetNode,
+                type:""
+            }));
+            console.log(dataset.links);
+            readyToLink = false;
+            d3.select("svg").remove();
+            drawGraph(dataset);}
         });
 
     var texts = nodes.append("text")
@@ -121,12 +141,12 @@ function drawGraph(dataset) {
             return d["title"];
         });
 
-    force.drag().on('dragstart', dragstart);
+    //force.drag().on('dragstart', dragstart);
 
-    nodes.call(force.drag);
+    nodes.call(force.drag().on('dragstart', dragstart));
 
     function dragstart (d){
-        //console.log('drag start!');
+        console.log('drag start!');
         d3.event.sourceEvent.stopPropagation();
     }
 
