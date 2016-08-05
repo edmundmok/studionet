@@ -1,4 +1,4 @@
-d3.json("javascripts/dummy.json", function(error, data) {
+d3.json("http://localhost:3000/api/all", function(error, data) {
 
     if (error) {
         console.log("error");
