@@ -1,0 +1,312 @@
+[
+  {
+    "graph": {
+      "nodes": [
+        {
+          "id": "87",
+          "labels": [
+            "user"
+          ],
+          "properties": {
+            "year": 2,
+            "nusOpenId": "E0002744",
+            "canEdit": true,
+            "name": "Edmund",
+            "lastLoggedIn": 1470033863980,
+            "avatar": "/uploads/E0002744/avatar",
+            "superAdmin": true
+          }
+        }
+      ],
+      "relationships": [
+        
+      ]
+    }
+  },
+  {
+    "graph": {
+      "nodes": [
+        {
+          "id": "87",
+          "labels": [
+            "user"
+          ],
+          "properties": {
+            "year": 2,
+            "nusOpenId": "E0002744",
+            "canEdit": true,
+            "name": "Edmund",
+            "lastLoggedIn": 1470033863980,
+            "avatar": "/uploads/E0002744/avatar",
+            "superAdmin": true
+          }
+        },
+        {
+          "id": "121",
+          "labels": [
+            "module"
+          ],
+          "properties": {
+            "contributionTypes": [
+              "test"
+            ],
+            "code": "test1",
+            "name": "test"
+          }
+        }
+      ],
+      "relationships": [
+        {
+          "id": "44",
+          "type": "MEMBER",
+          "startNode": "121",
+          "endNode": "87",
+          "properties": {
+            "role": "Admin"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "graph": {
+      "nodes": [
+        {
+          "id": "129",
+          "labels": [
+            "module"
+          ],
+          "properties": {
+            "contributionTypes": [
+              "weqwe",
+              "wew",
+              "eqw"
+            ],
+            "code": "weqeqwe",
+            "name": "qweq"
+          }
+        },
+        {
+          "id": "87",
+          "labels": [
+            "user"
+          ],
+          "properties": {
+            "year": 2,
+            "nusOpenId": "E0002744",
+            "canEdit": true,
+            "name": "Edmund",
+            "lastLoggedIn": 1470033863980,
+            "avatar": "/uploads/E0002744/avatar",
+            "superAdmin": true
+          }
+        }
+      ],
+      "relationships": [
+        {
+          "id": "48",
+          "type": "MEMBER",
+          "startNode": "129",
+          "endNode": "87",
+          "properties": {
+            "role": "Admin"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "graph": {
+      "nodes": [
+        {
+          "id": "87",
+          "labels": [
+            "user"
+          ],
+          "properties": {
+            "year": 2,
+            "nusOpenId": "E0002744",
+            "canEdit": true,
+            "name": "Edmund",
+            "lastLoggedIn": 1470033863980,
+            "avatar": "/uploads/E0002744/avatar",
+            "superAdmin": true
+          }
+        },
+        {
+          "id": "135",
+          "labels": [
+            "file"
+          ],
+          "properties": {
+            "date": 1469421313217,
+            "size": 67645,
+            "name": "empty-fridge.jpg",
+            "type": "model"
+          }
+        }
+      ],
+      "relationships": [
+        {
+          "id": "51",
+          "type": "UPLOADED",
+          "startNode": "87",
+          "endNode": "135",
+          "properties": {
+            "type": "model"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "graph": {
+      "nodes": [
+        {
+          "id": "87",
+          "labels": [
+            "user"
+          ],
+          "properties": {
+            "year": 2,
+            "nusOpenId": "E0002744",
+            "canEdit": true,
+            "name": "Edmund",
+            "lastLoggedIn": 1470033863980,
+            "avatar": "/uploads/E0002744/avatar",
+            "superAdmin": true
+          }
+        },
+        {
+          "id": "136",
+          "labels": [
+            "file"
+          ],
+          "properties": {
+            "date": 1469428691679,
+            "size": 17384,
+            "name": "GER1000 Tutorial 1.docx",
+            "type": "model"
+          }
+        }
+      ],
+      "relationships": [
+        {
+          "id": "52",
+          "type": "UPLOADED",
+          "startNode": "87",
+          "endNode": "136",
+          "properties": {
+            "type": "model"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "graph": {
+      "nodes": [
+        {
+          "id": "87",
+          "labels": [
+            "user"
+          ],
+          "properties": {
+            "year": 2,
+            "nusOpenId": "E0002744",
+            "canEdit": true,
+            "name": "Edmund",
+            "lastLoggedIn": 1470033863980,
+            "avatar": "/uploads/E0002744/avatar",
+            "superAdmin": true
+          }
+        },
+        {
+          "id": "94",
+          "labels": [
+            "contribution"
+          ],
+          "properties": {
+            "contributionTypes": [
+              "Question",
+              "test"
+            ],
+            "editted": false,
+            "lastUpdated": 1470033863980,
+            "ref": -1,
+            "title": "How do I create a question?",
+            "body": "I need help!",
+            "labels": [
+              "question",
+              "urgent",
+              "serious"
+            ]
+          }
+        }
+      ],
+      "relationships": [
+        {
+          "id": "65",
+          "type": "CREATED",
+          "startNode": "87",
+          "endNode": "94",
+          "properties": {
+            
+          }
+        }
+      ]
+    }
+  },
+  {
+    "graph": {
+      "nodes": [
+        {
+          "id": "97",
+          "labels": [
+            "contribution"
+          ],
+          "properties": {
+            "contributionTypes": [
+              "Answer",
+              "test"
+            ],
+            "editted": false,
+            "lastUpdated": 1470033863981,
+            "ref": 94,
+            "label": [
+              "funny"
+            ],
+            "title": "RE: How do I create a question?",
+            "body": "You just did !"
+          }
+        },
+        {
+          "id": "87",
+          "labels": [
+            "user"
+          ],
+          "properties": {
+            "year": 2,
+            "nusOpenId": "E0002744",
+            "canEdit": true,
+            "name": "Edmund",
+            "lastLoggedIn": 1470033863980,
+            "avatar": "/uploads/E0002744/avatar",
+            "superAdmin": true
+          }
+        }
+      ],
+      "relationships": [
+        {
+          "id": "70",
+          "type": "VIEWED",
+          "startNode": "87",
+          "endNode": "97",
+          "properties": {
+            "count": 1
+          }
+        }
+      ]
+    }
+  }
+]
