@@ -50,7 +50,7 @@ function idIndex(a, id) {
 
 
 function drawGraph(dataset) {
-    var w = 2000, h =2000;
+    var w = 1500, h =1500;
 
     var force = d3.layout.force()
         .nodes(dataset.nodes)
@@ -60,16 +60,37 @@ function drawGraph(dataset) {
         .charge([-600])
         .start();
 
-    
-
     // scale graph
-    d3.select("#graph").select("svg")
+    var svg = d3.select("#graph").append("svg")
              //better to keep the viewBox dimensions with variables
             .attr("viewBox", "0 0 " + w + " " + h )
-            .attr("preserveAspectRatio", "xMidYMid meet");
+            .attr("preserveAspectRatio", "xMidYMid meet")
+            /*.on("click", function(){
+                force.nodes(dataset.nodes.push({
+                    id: 10000+dataset.nodes.length,
+                    label: 'test label',
+                    title: 'Test Click',
+                    x: d3.mouse(this)[0],
+                    y: d3.mouse(this)[1]
+                }));
+                drawGraph(dataset)
+
+            });*/
+             .call(d3.behavior.zoom().on("zoom", function () {
+                svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
+              }))
+              .append("g");
+
+    /* Test Circle
+        svg.append("circle")
+      .attr("cx", document.body.clientWidth / 2)
+      .attr("cy", document.body.clientHeight / 2)
+      .attr("r", 50)
+      .style("fill", "#B8DEE6")
+    */
 
 
-    var links = d3.select("#graph").select("svg").selectAll("line")
+    var links = svg.selectAll("line")
         .data(dataset.links)
         .enter()
         .append("line")
@@ -77,15 +98,21 @@ function drawGraph(dataset) {
         .style("stroke-width", 1);
 
 
-    var nodes = d3.select("#graph").select("svg").selectAll("g")
+    var nodes = svg.selectAll("g")
         .data(dataset.nodes)
         .enter()
-        .append("g");
+        .append("g")
+        .on("click", function(){
+            d3.event.stopPropagation();
+        });
 
     var circles = nodes.append("circle")
         .attr("r", 40)
         .style("fill", function(d, i) {
             return color(d["label"]);
+        })
+        .on("click", function(){
+            d3.event.stopPropagation();
         });
 
     var texts = nodes.append("text")
@@ -94,7 +121,14 @@ function drawGraph(dataset) {
             return d["title"];
         });
 
+    force.drag().on('dragstart', dragstart);
+
     nodes.call(force.drag);
+
+    function dragstart (d){
+        //console.log('drag start!');
+        d3.event.sourceEvent.stopPropagation();
+    }
 
     force.on("tick", function() {
         links.attr("x1", function(d) {
@@ -125,6 +159,8 @@ function drawGraph(dataset) {
             });
 
     });
+
+
 }
 
 function color(type) {
@@ -142,7 +178,7 @@ function color(type) {
 }
 
 function setTitle(n) {
-    if (n.labels[0] === "contribution") {
+    if (n.labels[0] === "contribution" || n.labels[0]==='post') {
         return n.properties.title;
     } else {
         return n.properties.name;
