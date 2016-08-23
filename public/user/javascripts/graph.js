@@ -124,12 +124,11 @@ function drawGraph(dataset) {
         } else{
             targetNode = d;
             console.log("targeNode: "+targetNode);
-            force.links(dataset.links.push({
+            dataset.links.push({
                 source: sourceNode,
                 target: targetNode,
-                type:""
-            }));
-            console.log(dataset.links);
+                type: "test"
+            });
             readyToLink = false;
             d3.select("svg").remove();
             drawGraph(dataset);}
