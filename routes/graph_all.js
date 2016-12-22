@@ -11,18 +11,16 @@ var db = require('seraph')({
 // route: /graph/all
 router.route('/')
 
-	// return whole graph
+	// return all contributions graph
 	.get(auth.ensureAuthenticated, function(req, res){
 
-		// AKM - needs a direction or it sends double
 		var query = [
-									//'MATCH p=()-[]->() RETURN p'
-									'MATCH (p:contribution)-[r]->(q:contribution) RETURN p,r'
-								].join('\n');
+			'MATCH p=(:contribution)-[*1]->(:contribution)',
+			'RETURN p'
+		].join('\n');
 
 		apiCall(query, function(data){
 			res.send(data);
-
 		});
 
   });
@@ -33,46 +31,34 @@ router.route('/me')
 
 	// return only my network
 	.get(auth.ensureAuthenticated, function(req, res){
-		
-		/*
-		var query = [
-									'MATCH (u:user) WHERE ID(u)=87',
-									'MATCH (u)-[*1..2]-(a)',
-									'RETURN u as user, collect(a) as things'
-								].join('\n');
-		*/
 
 		var query = [
-									'MATCH (u:user) WHERE ID(u)=' + req.user.id,
-									'MATCH p=(u)-[*1..2]-()',
-									'RETURN p'
-								].join('\n');
-
-
+			'MATCH (u:user) WHERE ID(u)=' + req.user.id,
+			'MATCH p=(u)-[*1..2]->()',
+			'RETURN p'
+		].join('\n');
 		
 		apiCall(query, function(data){
 			res.send(data);
-
 		});
-	});
-
-	// route: /graph/all/groups
-	// TODO
-	router.route('/groups')
-
-		// return whole graph
-		.get(auth.ensureAuthenticated, function(req, res){
-
-			var query = [
-							'MATCH (g:group) WITH g',
-							'MATCH (g)-[s:SUBGROUP]->(m)',
-							'RETURN g, m, s'
-						].join('\n');
-		
-			apiCall(query, function(data){	
-				res.send(data);
-			});
 
 	});
+
+// route: /graph/all/groups
+router.route('/groups')
+
+	// return whole graph
+	.get(auth.ensureAuthenticated, function(req, res){
+
+		var query = [
+			'MATCH p=(:group)-[:SUBGROUP]->(:group)',
+			'RETURN p'
+		].join('\n');
+	
+		apiCall(query, function(data){	
+			res.send(data);
+		});
+
+});
 		
 module.exports = router;

@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>StudioNET - A Graph Based Sharing Network</title>
+    <title>Studionet - A Graph Based Sharing Network</title>
     
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
 
     <!-- Theme -->
     <link rel="stylesheet" type="text/css" href="../assets/css/vendor.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/flat-admin.css">
-    
-    <link rel="stylesheet" type="text/css" href="../assets/css/theme/blue-sky.css">
-    <link rel="stylesheet" type="text/css" href="../assets/css/theme/blue.css">
-    <link rel="stylesheet" type="text/css" href="../assets/css/theme/red.css">
-    <link rel="stylesheet" type="text/css" href="../assets/css/theme/yellow.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.1/ng-tags-input.min.css">
 
     <!-- CSS for Filters -->
     <link rel="stylesheet" href="/user/stylesheets/treesearch/kjvelarde-multiselect-searchtree-0.9.0.min.css">
     <link rel="stylesheet" href="/user/stylesheets/slider/angular-ranger.css">
+
+    <!-- QTip -->
+    <link rel="stylesheet" href="/user/stylesheets/jquery.qtip.min.css">
 
     <!-- Overrides -->
     <link rel='stylesheet' href='/user/stylesheets/style.css' />
@@ -37,15 +35,12 @@
           </div>
         </script>
 
+        <!--Top Nav Bar -->
+        <ng-include src="'templates/top-navbar.html'" ng-controller='NavCtrl'></ng-include>
+        
         <div class="app-container">
-
-
             <!-- Main Graph View OR User View -->
             <ui-view></ui-view>
-
-
-            <div class='row text-center'>
-            </div>
         </div>
 
     </div>
@@ -59,13 +54,13 @@
   <!--- Bootstrap -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
-  <!-- AngulaJS & Dependencies -->
+  <!-- AngularJS & Dependencies -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-animate.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.1/ng-tags-input.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/12.0.4/ng-file-upload-all.min.js"></script>
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js"></script>
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-sanitize.js"></script>
 
   <!-- Angular Bootstrap -->
@@ -79,18 +74,30 @@
   <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
   <!-- d3.js -->
   <script src="//d3js.org/d3.v3.js" charset="utf-8"></script>  
+  
   <!-- Cytoscape Cola -->
-  <script src="http://marvl.infotech.monash.edu/webcola/cola.v3.min.js"></script>
-  <script src="/user/javascripts/graphs/cytoscape-cola.js" charset="utf-8"></script>      
+  <!--   <script src="http://marvl.infotech.monash.edu/webcola/cola.v3.min.js"></script> -->
+  <script src="/user/javascripts/graphs/cola.v3.min.js"></script>
+  <script src="/user/javascripts/graphs/cytoscape-cola.js" charset="utf-8"></script>     
 
+  <!-- Dagre -->
+  <script src="/user/javascripts/graphs/cytoscape-dagre.js" charset="utf-8"></script>  
+
+  <!--qtip -->
+  <script src="/user/javascripts/graphs/jquery.qtip.min.js" charset="utf-8"></script>   
+  <script src="/user/javascripts/graphs/cytoscape-qtip.js" charset="utf-8"></script>      
 
   <!-- Angular Routing -->
   <script type="text/javascript" src="/user/javascripts/angularApp.js"></script>
   
-  <!-- Controllers and Services -->
+  <!-- Controllers, Services & Helpers-->
   <script type="text/javascript" src="/user/javascripts/services.js"></script>
 
-  <script type="text/javascript" src="/user/javascripts/controllers/HomeCtrl.js"></script>
+  <!-- Graph Helper -->
+  <script src="/user/javascripts/graphs/graph-helper.js"></script>
+
+  <script type="text/javascript" src="/user/javascripts/controllers/NavCtrl.js"></script>
+  <script type="text/javascript" src="/user/javascripts/controllers/ContributionsCtrl.js"></script>
   <script type="text/javascript" src="/user/javascripts/controllers/DetailsModalCtrl.js"></script>
   <script type="text/javascript" src="/user/javascripts/controllers/FilterCtrl.js"></script> 
 

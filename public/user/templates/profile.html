@@ -3,7 +3,7 @@
   <div class="col-sm-6">
     <div class="card">
       <div class="card-body app-heading">
-        <img class="profile-img" src={{user.avatar}}></button>
+        <img class="profile-img" src="{{user.avatar}}"></button>
         <div class="app-title">
           <div class="title">
             <span class="highlight"><input ng-model='user.name' style='border: none;' ng-keypress='changeName($event)'></span>
@@ -50,6 +50,11 @@
         </ul>
     </div>
     <div uib-accordion-group class="panel-default" heading="My Tags ({{10}})">
+        <ul ng-repeat="contribution in contributions">
+          <li>{{contribution.name}}</li>
+        </ul>
+    </div>
+    <div uib-accordion-group class="panel-default" heading="My Filters ({{10}})">
         <ul ng-repeat="contribution in contributions">
           <li>{{contribution.name}}</li>
         </ul>

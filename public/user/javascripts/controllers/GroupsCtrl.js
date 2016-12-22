@@ -12,315 +12,377 @@ angular.module('studionet')
 	$scope.user = profile.user;
 	$scope.groups = groups.groups;
 	$scope.users = users.usersById();
+
 	$scope.graph = {};
-	$scope.activeGroup = {
-			'name' : "",
-			'description' : "",
-			'restricted': false,
-			'groupParentId': "" 
-	};  // placeholder group
-	$scope.activeElement = {};
-
-
 
 	/*
-	 *  Helper Function
+	 * Graph Creation and Interactions
 	 */
-	var drawGraph = function(){
+
+	var onTap = function(evt){
 		
-		// Function to format graph nodes
-		var createGraphNode = function(node){
-		    
-		    node.faveShape = "ellipse";
-		    
-		    if( node.properties.superNode != undefined ){
-		          node.faveShape = "ellipse";
-		          node.faveColor = "black";
-		          node.width = "40";
-		          node.height = "40";      
-		    }
-		    else if( node.properties.role == "Admin" ){
-		          node.faveShape = "ellipse";
-		          node.faveColor = "blue";
-		          node.width = "20";
-		          node.height = "20";      
-		    }
-		    else if( node.properties.role ){
-		          node.faveShape = "ellipse";
-		          node.faveColor = "green";
-		          node.width = "20";
-		          node.height = "20";      
-		    }
-		    else if( node.properties.restricted){
-		          node.faveShape = "ellipse";
-		          node.faveColor = "grey";
-		          node.width = "20";
-		          node.height = "20";      
-		    }		    
-		    else if( !node.properties.restricted){
-		          node.faveShape = "ellipse";
-		          node.faveColor = "lightgreen";
-		          node.width = "20";
-		          node.height = "20";      
-		    }
-		    else {
-		          node.faveShape = CONTRIBUTION_SHAPE;
-		          node.faveColor = CONTRIBUTION_COLOR;
-		          node.width = CONTRIBUTION_WIDTH;
-		          node.height = CONTRIBUTION_HEIGHT;
-		    }
-
-		    return  { data: node };
-		}
-
-		// preprocessing
-		profile.getGroups();
-	    groups.graph.nodes.map( function(node){
-	    	var created = node.properties.createdBy; 
-	    	if(node.properties.createdBy == $scope.user.id)
-	    		node.properties.role = "Admin";
-	    	else {
-	    		for(var i=0; i < profile.groups.length; i++){
-	    			if(profile.groups[i].id == node.id){ console.log("mem")
-
-	    				node.properties.role = "Member";
-	    			}
-	    		}
-	    	}
-	    })
-	
-		// creating the grpah
-		var graph = makeGraph( groups.graph, 'user-graph', createGraphNode);
-		
-		// relate with current user
-		profile.groups.map( function(group){
-			graph.getElementById(group.id).data().role = group.role;
-			graph.getElementById(group.id).data();
-		})
-
-		// 
-		graph.on('tap', 'node', function(evt){
-			    		
-			    		if(evt.cyTarget.data().properties.superNode == undefined){
-				    		
-				    		$scope.viewGroup(evt.cyTarget.id());
-				    		$scope.activeElement = evt.cyTarget.data();
-				    		
-				    		$("#viewModal").modal();
-			    		}
-
-			    		//console.log(evt.cyTarget.data().properties.createdBy == profile.id);
-
-			    	})
-
-		$scope.graph = graph;
-
-	};
-
-
-	drawGraph();
-
-
-
-	/*** Viewing ***/
-	$scope.viewGroup = function(id){
-		group.getGroupInfo(id);
-		group.getGroupUsers(id);
-		$scope.activeGroup = group.group;
-		$scope.activeGroup.users = group.users;
-
-		group.users.map( function(user){
-			$scope.users[user.id].status = "Yes";
-		})
-	}
-
-	$scope.joinGroup = function(){
-
-		var data = {
-			'userId': $scope.user.id,
-			'groupId': $scope.activeGroup.id,
-			'groupRole': 'Member'
-		}
-
-		group.addGroupMember(data);
-
-		drawGraph();
-
-	}
-
-	$scope.editGroup = function(id){
-		group.getGroupInfo(id);
-		group.getGroupUsers(id);
-		$scope.activeGroup = group.group;
-	}
-
-
-	/*** Creating ***/
-	$scope.createGroup = function(){
-		
-		$scope.activeGroup = {
-
-			'name' : "",
-			'description' : "",
-			'restricted': false,
-			'groupParentId': "-1",
-		};
-	}
-
-	$scope.toggleRestricted = function(){
-		$scope.activeGroup.restricted = !$scope.activeGroup.restricted;
-	}
-
-
-	/** Saving Group ***/
-	$scope.saveGroup = function(){
-
-		// Convert Group Parent Id to Integer
-		$scope.activeGroup.groupParentId = parseInt($scope.activeGroup.groupParentId);
-		console.log($scope.activeGroup);
-
-		
-		
-		$http({
-		  method  : 'POST',
-		  url     : '/api/groups/',
-		  data    : $scope.activeGroup,  // pass in data as strings
-		  headers : { 'Content-Type': 'application/json' }  // set the headers so angular passing info as form data (not request payload)
-		 })
-		.success(function(data) {
-		    
-		    if (!data.success) {
-		      // if not successful, bind errors to error variables
-		      //$scope.errorName = data.errors.name;
-		      //$scope.errorSuperhero = data.errors.superheroAlias;
-		    } else {
-		      // if successful, bind success message to message
-		      //$scope.message = data.message;
-		    }
-
-		  })	 
-
-
-	}
-
-	/*** Editing Group ***/
-	$scope.saveGroupEdit = function(){
-
-		console.log($scope.activeGroup);
-		
-		$http({
-		  method  : 'PUT',
-		  url     : '/api/groups/' + $scope.activeGroup.id,
-		  data    : $scope.activeGroup,  // pass in data as strings
-		  headers : { 'Content-Type': 'application/json' }  // set the headers so angular passing info as form data (not request payload)
-		 })
-		.success(function(data) {
-		    
-		    console.log("data", data);
-
-		    if (!data.success) {
-
-
-		      // if not successful, bind errors to error variables
-		      //$scope.errorName = data.errors.name;
-		      //$scope.errorSuperhero = data.errors.superheroAlias;
-		    } else {
-		      // if successful, bind success message to message
-		      //$scope.message = data.message;
-		    }
-
-		  })	
-
-	}
-
-
-	/*** Adding User *****/
-	$scope.groupUsers = [];
-	$scope.addUserModal = function(group){
-		$scope.groupUsers = []
-		$scope.activeGroup = group;
-		$scope.users = [];
-		console.log($scope.activeGroup);
-		console.log('/api/groups/' + $scope.activeGroup.id + '/users');
-
-		$http.get('/api/users/').success(function(data){
-
-			$http.get('/api/groups/' + $scope.activeGroup.id + '/users').success(function(subdata){
-				
-				$scope.groupUsers = subdata;
-
-				// attach role with this group to the users
-				for(var i=0; i<subdata.length; i++){
-
-					for(j=0; j < data.length; j++){
-
-						if(subdata[i].id == data[j].id){
-							data[j].status = "Yes";
-						}
-						else{
-							data[j].status = "No";
-						}
-					}
-				}
-					
-				$scope.users = data;
-
-			});	
-		});		
-	}
-
-
-	$scope.addUser = function(user){
-
-		var data = {
-			'userId': user.id,
-			'groupId': $scope.activeGroup.id,
-			'groupRole': 'Member'
-
-		}
-
-
-		if(user.status == "No"){
-
-			// add users in $scope.groupUsers 
-			// POST /api/groups/:groupId/users/
-			$http({
-			  method  : 'POST',
-			  url     : '/api/groups/' + $scope.activeGroup.id +'/users/',
-			  data    : data,  // pass in data as strings
-			  headers : { 'Content-Type': 'application/json' }  // set the headers so angular passing info as form data (not request payload)
-			 })
-			.success(function(data) {
-			    
-			    if(data){
-			    	user.status = "Yes"
-			    }
-
-			  })				
+		if(evt.cyTarget.data().type == "USER"){
+			console.log("you clicked on a user");
 		}
 		else{
-			// remove user from group
-			user.status = "No";
+
+			// remove other users
+			var collection = $scope.graph.elements("node[type = 'USER']");
+			$scope.graph.remove( collection );
+			 
+			if( evt.cyTarget.data().supernode ){
+				return; 
+			}
+			else{
+
+				// fix me
+				group.getGroupInfo(evt.cyTarget.data().id).then( function(){
+
+					// explode the node to show users
+					group.getGroupUsers(evt.cyTarget.data().id)
+					.then(function(){
+
+						for (var i=0; i<group.users.length; i++) {
+
+							group.users[i].type = "USER";
+
+							var node = { group: "nodes", data: group.users[i] };
+							var edge = { group: "edges", data: { source: evt.cyTarget.data().id, target: group.users[i].id } }
+
+						    $scope.graph.add([ node, edge ]);
+						    $scope.graph.layout().stop(); 
+						    layout = $scope.graph.elements().makeLayout({ 'name': 'cola'}); 
+						    layout.start();
+
+						   	// change css of user-nodes
+						    $scope.graph.nodes().map(function(node){ 
+						    	if(node.data().type == "USER"){ 
+						    		node.css({'background-color':'red', 'width': 10, 'height': 10}) 
+						    	} 
+						    })
+						}
+
+					});
+				})
+				
+			}
+			
 		}
-		
+	}
+
+	var onHover = function(evt){
+
+	    if(evt.cyTarget.data().supernode)
+	    	return;
+
+		// update the service
+	    var node = evt.cyTarget;
+	    var nodeData = node.data();
+
+	    var qtipFormat = STUDIONET.GRAPH.qtipFormat(evt);
+
+	    qtipFormat.content.title = nodeData.name;
+	
+	    // change content text for users
+	    if(nodeData.type == "USER"){
+	    	qtipFormat.content.text = "<center><img " + 
+	    				   "style='width: 80px; height: 80px; display: inline-block;' " +
+	    				   "src=' " + nodeData.avatar + "'><br>" + 
+	    				   "<b>About the User</b><br>Lorem ipsum Incididunt et laborum cillum officia reprehenderit minim laborum sint aliquip aliqua elit dolor.";
+
+	    	qtipFormat.style.width = '180px';
+
+	    }
+	    else{
+			qtipFormat.content.text +="<p>" + nodeData.description.substr(0,100)  +  "</p>"
+						+ "<p><b>Status:</b> " + ( nodeData.requestingUserStatus || "Not Joined" ) + "</p>" + 
+	         		  "<button class='btn btn-link btn-sm pull-right qtip-btn' onclick='viewGroup(" + nodeData.id +")'>More</button></p>"
+	    }
+
+	    node.qtip(qtipFormat, evt);		
+	}
+
+
+	$scope.graphInit = function(graph_data){
+	  
+	  	// fix
+		/*		profile.getGroups().then( function(){ 
+
+			groups.getAll().then( function(){
+
+				groups.getGraph().then(function(){
+
+						// creating the grpah
+						var graph = makeGraph( groups.graph, 'user-graph', createGraphNode);
+						
+						// add interactions 
+						graph.on('tap', 'node', function(evt){ onTap(evt); })
+						graph.on('mouseover', 'node', function(evt) { onHover(evt); });
+
+						// attach it to the scope
+						$scope.graph = graph;
+
+
+			            graph.minZoom(0.5);
+			            graph.maxZoom(1.5);
+			    })
+
+			})
+		});*/
+
+		// takes either data from filters or contribution.graph data
+		$scope.graph = STUDIONET.GRAPH.makeGraph( graph_data || groups.graph, 'user-graph' );
+		var cy = $scope.graph;
+
+		cy.on('mouseover','node', function(evt){		onHover(evt);		});
+		cy.on('mouseout','node', function(evt){				});
+		cy.on('tap','node', function(evt){		onTap(evt);		});
 
 	}
 
-	$scope.leaveGroup = function(){
+	/*
+     *	
+     *	Modal Functions & Graph Interactions
+     *	
+	 */
+	
+	$scope.resetGraph = function(){
+	    $scope.graph.layout().stop(); 
+	    layout = $scope.graph.elements().makeLayout({ 'name': 'cola'}); 
+	    layout.start();		
+	}
 
-		var data = {
-			groupId: $scope.activeGroup.id,
-			userId: $scope.user.id
+	$scope.createGroup = function(){ 
+		angular.element($("#createGroupModal")).scope().reset();
+		$("#createGroupModal").modal(); 
+	}
+
+	viewGroup = function(group_id){  
+		angular.element($("#viewGroupModal")).scope().reset();
+		group.getGroupInfo(group_id).then( function(){ 
+			$("#viewGroupModal").modal();
+		})
+	}
+
+	$scope.editGroup = function( group_id ){	
+		angular.element($("#editGroupModal")).scope().reset();
+		group.getGroupInfo(group_id).then( function(){
+			group.getGroupUsers(group_id).then( function(){
+				$("#editGroupModal").modal();
+			})
+		})
+	}
+
+
+}]);
+
+
+
+/*
+ *
+ *	Modal Controllers
+ *		
+ */
+
+
+// Group Creation Controller
+angular.module('studionet').controller('CreateGroupCtrl', ['$scope', 'groups', 'supernode', function($scope, groups, supernode){
+
+	$scope.groupCreated = false; 
+	$scope.groupError = false;
+
+	$scope.newGroupId = undefined;
+
+
+	$scope.group = {
+		groupParentId: supernode.group
+	};
+
+	$scope.createGroup = function(){
+
+		groups.createNewGroup($scope.group).then( function(data){
+		
+			// refresh the graph underneath
+			// function present in container scope
+			console.log(data);
+			$scope.newGroupId = data.id; 
+			$scope.$parent.refreshGraph();
+			showSuccess();
+		
+		}, function(error){
+
+			showError();
+
+		});
+
+	}
+
+	$scope.editGroup = function(){
+		$scope.$parent.editGroup( $scope.newGroupId  );
+	}
+
+	$scope.reset = function(){
+		$scope.groupCreated = false; 
+		$scope.groupError = false;
+
+		$scope.newGroupId = undefined;	
+
+		$scope.group = {
+			groupParentId: supernode.group
+		};	
+	}
+
+	var showSuccess = function(){
+
+		$scope.groupCreated = true;
+		$scope.groupError = false;
+		
+	}
+
+	var showError = function(){
+		$scope.groupError = true;
+	}
+
+
+}]);
+
+
+// Edit Groups Controller
+angular.module('studionet').controller('EditGroupCtrl', ['$scope', 'groups', 'group', 'supernode', 'users', function($scope, groups, group, supernode, users){
+
+	// get group info
+	$scope.activeGroup = group.group; 
+	// get members
+	$scope.group_users = group.users;
+	$scope.members = users.users; 
+
+	$scope.status = {};
+
+	$scope.isMember = function(id){
+
+		for(var i=0; i < $scope.group_users.length; i++){
+
+			if(id == $scope.group_users[i].id)
+				return true;
 		}
 
-		group.removeGroupMember(data);
-		drawGraph();
+		return false;
+
+	}
+
+	$scope.add = function(id){
+
+		group.addGroupMember({ users: [id] }).then(function(){
+			//alert("User added");
+		})
+
+	}
+
+	$scope.remove = function(id){
+
+		group.removeGroupMember({ users: [id] }).then(function(){
+			//alert("User removed");
+		})
+	}
+
+	$scope.saveGroup = function(){
+
+		group.updateGroup($scope.activeGroup).then( function(data){
+		
+			// refresh the graph underneath
+			// function present in container scope
+			$scope.$parent.refreshGraph();
+
+			showSuccess();
+		
+		}, function(error){
+
+			showError();
+
+		});
+
+	}
+
+	var showSuccess = function(msg){
+		$scope.status.value = true;
+		$scope.status.msg = msg || "Group edited." 
+	}
+
+	var showError = function(){
+		$scope.status.value = false;
+		$scope.status.msg = "Error occured while editing group." 
+	}
+
+	$scope.reset = function(){
+		$scope.status = {};
+	}
+
+}]);
+
+
+
+// View Group Controller
+angular.module('studionet').controller('ViewGroupCtrl', ['$scope', 'profile', 'group', function($scope, profile, group){
+
+	// check if scope has active group
+	$scope.activeGroup = group.group; 
+
+	$scope.members = group.users;
+
+	$scope.active = 0; 
+	$scope.error = undefined;
+	$scope.success = undefined; 
+
+	$scope.reset = function(){
+		$scope.active = 0; 
+		$scope.error = undefined;
+		$scope.success = undefined; 
 	}
 
 	$scope.deleteGroup = function(){
-		group.deleteGroup();
+		group.deleteGroup().then(function(){
+				showSuccess();
+
+				$scope.$parent.refreshGraph();
+
+
+		}, function(){
+				showError();
+		});
+
+	}
+
+	$scope.editGroup = function(){
+		$scope.$parent.editGroup( $scope.activeGroup.id );
 	}
 
 
+	$scope.joinGroup = function(){
+		group.joinGroup().then( function(data){
+			showSuccess("Successsfully joined the group", data); 
+			$scope.$parent.refreshGraph();
+		});
+	}
 
-}])
+	$scope.leaveGroup = function(){
+		group.leaveGroup().then( function(data){
+			showSuccess("Successsfully left the group", data); 
+			$scope.$parent.refreshGraph();
+		});
+	}
+
+
+	var showSuccess = function(msg){
+
+		$scope.success = true;
+		$scope.error = false;
+		$scope.successMsg = msg || "Group has been deleted."
+		
+	}
+
+	var showError = function(){
+		$scope.error = true;
+	}
+
+}]);
+

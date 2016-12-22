@@ -5,7 +5,7 @@
   "scripts": {
     "pre-build": "echo I run before the build script",
     "start": "node ./bin/www",
-    "test": "mocha --timeout 2000"
+    "test": "mocha --timeout 15000"
   },
   "dependencies": {
     "angular-ui-bootstrap": "^2.3.0",
@@ -16,8 +16,11 @@
     "express": "~4.13.4",
     "express-session": "^1.14.0",
     "eyespect": "^0.1.10",
+    "fs-extra": "^1.0.0",
     "glob": "^7.0.5",
+    "gm": "^1.23.0",
     "mkdirp": "^0.5.1",
+    "mmmagic": "^0.4.5",
     "morgan": "~1.7.0",
     "multer": "^1.1.0",
     "nodemon": "^1.11.0",
@@ -28,13 +31,16 @@
     "request": "^2.74.0",
     "seraph": "^0.14.4",
     "serve-favicon": "~2.3.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "winston": "^2.3.0",
+    "winston-daily-rotate-file": "^1.4.0"
   },
   "optionalDependencies": {
     "nodemon": "^1.11.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
     "mocha": "^3.2.0",
     "supertest": "^2.0.1"
   }

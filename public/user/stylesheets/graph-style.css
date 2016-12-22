@@ -1,60 +1,77 @@
 /*
- * Layouts - Experimental
+ * Graph CSS
  */
-* {
-  margin: 0px;
-  padding: 0px; }
 
-.layouts {
-  border: 1px solid black;
-  width: 100%;
-  height: 40px;
-  padding: 0px 2%;
-  margin-left: 5%;
-  line-height: 40px;
-  background-color: rbga(0, 0, 0, 0.6);
-  z-index: 2; 
+.graph-container{
+  position: relative;
+  height: 100% !important;
+  margin-top: 50px;
+  z-index: 1;
 }
-
-
-/* 
-#filter:hover + .layouts{
-	display: block;
-	animation-name: dropdown;
-	animation-duration: 1s;
-} */
-@keyframes dropdown {
-  0% {
-    margin-top: -30px; }
-  25% {
-    margin-top: -20px; }
-  50% {
-    margin-top: -10px; }
-  100% {
-    margin-top: 0px; } }
-/* .layouts:hover{
-	-webkit-transform: translate(0,40px);
-	   -moz-transform: translate(0,40px);
-	    -ms-transform: translate(0,40px);
-	     -o-transform: translate(0,40px);
-	        transform: translate(0,40px);
-	display: block;
-} */
-button {
-  color: #000000; }
-
-input {
-  color: #000000;
-  margin: 0px; }
 
 #cy {
-  position: absolute;
-  height: 100%;
+
+  position: relative;
+  margin-top: 50px;
+  height: calc( 100vh - 100px); // remove for topbar & filters
+ 
   width: 100%;
-  z-index: 10;
-  width: 100%;
-  left: 0; 
+
+  z-index: 2;
+
 }
+
+
+#user-graph {
+
+  position: relative;
+
+  width: 100%;
+  height: calc( 100vh - 50px); // remove for topbar & filters
+ 
+  z-index: 2;
+
+}
+
+
+.graph-controls{
+
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+
+  width: 30px; 
+  height: auto;
+
+  margin-left: calc(100vw - 75px);
+
+  z-index: 3;
+
+}
+
+
+.graph-nav-control{
+
+  position: relative !important;
+
+  width: 30px;
+  height: 30px;
+
+  line-height: 30px;
+  text-align: center;
+  
+  color: white;
+  background: #4A95EF;
+
+  box-shadow: 2px 2px 2px grey;
+  margin: 10px 0px;
+
+
+  //border: 1px solid black;
+}
+
+
+/*
 
 #content-block-hover {
   display: none;
@@ -63,12 +80,11 @@ input {
   color: #D9CCCC;
   border-radius: 0px;
   max-width: 200px;
-  z-index: 100;
+  z-index: 3;
   font-size: 12px;
   padding: 0px !important;
   border: 1px solid #000000;
   background-color: rgba(3, 3, 3, 1);
-  z-index: 200000;
   text-align: center;
   padding: 20px; }
   #content-block-hover .user {
@@ -124,4 +140,54 @@ input {
   border: 1px solid black;
   height: 500px; }
 
-/*# sourceMappingURL=graph-style.css.map */
+
+
+*:focus {
+    outline: 0 !important;
+}
+
+*:active {
+    background-color: none;
+}
+
+
+
+p.hover-content img{
+  width: 150px !important; 
+  height: 150px !important; 
+  display: block;
+}
+
+
+
+.info-popover{
+
+  width: 200px;
+
+  font-size: 14px; 
+  line-height: 20px;
+
+  border: 1px solid #706D6D;
+
+  z-index: 20 !important;
+}
+
+.info-popover:hover{
+  background-color: red;
+}
+
+.info-popover .title{
+  height: 35px; 
+  line-height: 35px;
+  background-color: #9CCBDA;
+}
+
+.title, .description{
+
+  padding: 0px 10px;
+}
+
+.description{
+  border: 1px solid #222;
+}
+*/

@@ -11,6 +11,8 @@
 - avatar (default @ /uploads/default/avatar) (avatar.png/..)
 - joinedOn 
 - lastLoggedIn
+- filters
+- filterNames
 
 #### User Relationship
 
@@ -18,7 +20,7 @@
 - User <- Group   [:CREATED {on: "Date"}]
 - User -> Tag [:CREATED {createdOn : "Date"}]
 - User -> Contribution [:CREATED {createdOn : "Date"}]
-- User -> Contribution [:VIEWED {count: 0, lastViewed : "Date"}]
+- User -> Contribution [:VIEWED {views: 0, lastViewed : "Date"}]
 - User -> Contribution [:RATED {rating: 0, lastRated : "Date"}]
 
 #### Groups Properties
@@ -27,12 +29,13 @@
 - name
 - description
 - dateCreated
+- createdBy
 
 #### Group Relationship
 
-- User <- Group   [:MEMBER {role: "Admin"/"User", on:'Date'}]
+- User <- Group   [:MEMBER {role: "Admin"/"Member", joinedOn:'Date'}]
 - Group -> Group [:SUBGROUP]
-- Group -> Tag [:TAG]
+- Group -> Tag [:TAGGED {createdBy: userid}]
 
 #### Tag Properties
 
@@ -42,18 +45,25 @@
 #### Tag Relationships
 
 - User -> Tag [:CREATED {createdOn : "Date"}]
-- Group -> Tag [:TAG]
+- Group -> Tag [:TAGGED {createdBy: userId}]
 - Contribution -> Tag [:TAGGED {createdBy: user-id}]
 
 
 #### Contribution Properties
 
+- createdBy
 - title
 - body
+- tags
 - ref
 - lastUpdated
-- editted
-- content-type
+- dateCreated
+- edited
+- contentType
+- rating (final rating from 0 - 5)
+- totalRating (sum of all ratings)
+- rateCount
+- views
 
 #### Contribution Relationships
 
@@ -67,4 +77,18 @@
 - Contribution -> Contribution [:RESOURCE {createdBy: <id>}]
 - Contribution -> Contribution [:INSPIRED {createdBy: <id>}]
 - Contribution -> Contribution [:RELATED {createdBy: <id>, note: "---description of the relationship---"}]
+
+#### Attachment Properties
+
+- dateUploaded
+- size
+- name
+- thumb
+- thumbName
+
+#### Attachment Relationships
+(uploaded to /uploads/:contributionId/attachments/{name of attachment})
+
+- User -> Attachment [:UPLOADED]
+- Contribution -> Attachment [:ATTACHMENT]
 

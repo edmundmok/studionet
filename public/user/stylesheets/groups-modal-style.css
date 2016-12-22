@@ -1,0 +1,94 @@
+/*
+ *	Modal CSS
+ */
+
+.modal-header{
+	height: 60px;
+	line-height: 45px;
+	padding: 0px !important;
+}
+
+
+.modal-title{
+	height: 60px;
+	line-height: 60px;
+	font-family: 'Roboto Condensed';
+	font-weight: bold;
+
+	margin-left: 30px;
+}
+
+.modal-content{
+
+}
+
+.control-label{
+	font-size: 14px; 
+	font-family: 'Roboto Condensed';
+	font-weight: bold;
+}
+
+.modal-footer{
+	height: 60px !important;
+	line-height: 45px;
+	padding: 5px !important;
+}
+
+.button-group{
+	position: relative;
+	height: 50px !important; 
+	text-align: center;
+	padding: 0px !important;
+}
+
+.modal-button{
+	margin: 0px !important;
+	min-width: 150px;
+	height: 100% !important;
+	font-size: 15px;
+	font-family: 'Roboto Condensed', sans-serif;
+}
+
+p.control-label-help{
+	font-size: 12px;
+	line-height: 14px;
+	font-family: 'Open Sans';
+}
+
+.alert{
+	font-size: 12px !important;
+}
+
+.edit-button{
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+
+
+/*
+ * User Lists
+ */
+
+img.user-avatar{
+	width: 30px !important; 
+	height: 30px !important; 
+	margin: 10px; 
+	border: 1px solid black; 
+	border-radius: 50%;
+}
+
+.user-list-name{
+	line-height: 50px;
+	font-size: 14px;
+}
+
+.user-row{
+	border-bottom: 1px solid #222;
+}
+
+.user-row:hover{
+	background-color: #ddd;
+}
+

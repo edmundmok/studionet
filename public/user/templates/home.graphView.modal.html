@@ -1,90 +1,116 @@
-<link rel='stylesheet' href='/user/stylesheets/modal-style.css' />
+<link rel='stylesheet' href='/user/stylesheets/contribution-modal-style.css' />
+<link rel='stylesheet' href='/user/stylesheets/groups-modal-style.css' />
 <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
 <div class="modal fade" display='block'>
-  <div class="modal-dialog modal-lg" ng-repeat='contribution in data'>
-    <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3 class='content-modal'>{{contribution.db_data.title}}</h3> 
+  <div class='row'>
+    <div class='col-sm-4'>
+      <div class="modal-dialog sidebar">
+        <div class='modal-content'>
+          <p>This is the sub-graph to show the map. It should associate with the scrolling actions in the right canvas.</p>
         </div>
-        <div class="modal-body">
-          <div class='row'>
-            <div class='col-sm-10'>
-              <div class='row'>
-                <ul class="nav nav-tabs pull-right">
-                  <li class="active"><a data-target="{{ '#content' + contribution.db_data.id}}" data-toggle="tab">Content</a></li>
-                  <li><a data-target="{{ '#statistics' + contribution.db_data.id}}"  data-toggle="tab">Statistics</a></li>
-                  <li><a data-target="{{ '#author' + contribution.db_data.id}}"  data-toggle="tab">Author</a></li><!-- Author -->
-                </ul>
-              </div>
-              <div class='row'>
-                <div class="tab-content">
-                  <div class='tab-pane fade in active' id="{{ 'content' + contribution.db_data.id}}">
-                    <b>Contribution's id: </b>{{contribution.id}}
-                    <br><br>
-                    <b>Contribution's type: </b>{{contribution.type}}
-                    <br><br>
-                    <b>Contribution's title: </b>{{contribution.db_data.title}} 
-                    <br><br>
-                    <b>Contribution's content: </b>
-                      <p ng-bind-html="contribution.db_data.body"></p>
-                    <br><br>
-                  </div>
-                  <div class='tab-pane fade' id="{{ 'statistics' + contribution.db_data.id}}">
-                      <h3>This is the column for contributions' statistics.</h3>
-                  </div>
-                  <div class='tab-pane fade' id="{{ 'author' + contribution.db_data.id}}">
-                      <h3>Author Details</h3>
-                      <p>{{ users[contribution.db_data.createdBy].name }}<p>
-                      <p>{{ users[contribution.db_data.createdBy].nusOpenId }}<p>
-                  </div>
-                  <button type="button" ng-click="close()" class="btn btn-primary btn-block" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    <div class='col-sm-8 modal-dialog-container'>
+      <div class="modal-dialog" ng-repeat='contribution in data'>
+        <div id="{{ 'modal' + contribution.db_data.id }}" class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h2 class='content-modal'>{{contribution.db_data.title}}</h2> 
+          </div>
+          <div class="modal-body">
+            <div class='row'>
+              <div class='col-sm-12'>
+                <div class='row'>
+                  <ul class="nav nav-tabs pull-right">
+                    <li class="active"><a data-target="{{ '#content' + contribution.db_data.id}}" data-toggle="tab">Content</a></li>
+                    <li><a data-target="{{ '#statistics' + contribution.db_data.id}}"  data-toggle="tab">Statistics</a></li>
+                    <li><a data-target="{{ '#author' + contribution.db_data.id}}"  data-toggle="tab">Author</a></li><!-- Author -->
+                  </ul>
+                </div>
+                <div class='row'>
+                  <div class="tab-content">
+                    <div class='tab-pane fade in active' id="{{ 'content' + contribution.db_data.id}}">
+<!--                       <b>Contribution's id: </b>{{contribution.id}}
+                      <br><br>
+                      <b>Contribution's type: </b>{{contribution.type}}
+                      <br><br>
+                      <b>Contribution's title: </b>{{contribution.db_data.title}} 
+                      <br><br>
+                      <b>Contribution's content: </b> -->
+                        <p ng-bind-html="contribution.db_data.body"></p>
+                      <br><br>
+                    </div>
+                    <div class='tab-pane fade' id="{{ 'statistics' + contribution.db_data.id}}">
+                        <h3>This is the column for contributions' statistics.</h3>
+                        <p>Lorem ipsum Exercitation esse fugiat quis do consectetur eu dolore dolor nisi cupidatat dolore quis occaecat sed id aute tempor fugiat aute aute est veniam et tempor velit sint consectetur amet in dolor ea in elit voluptate dolor minim do commodo eiusmod pariatur in consectetur ea consectetur qui et ut esse ut veniam elit ad culpa tempor veniam cillum ut esse dolor qui aliquip Duis ullamco deserunt ullamco laboris proident minim eu eiusmod et dolor et tempor fugiat officia amet aliquip mollit ut reprehenderit ad eu irure aute sed quis do velit do sit sunt ut consectetur ad reprehenderit minim cupidatat ad consequat in et Excepteur cillum nulla enim ex veniam cillum esse veniam dolor eu deserunt eu pariatur ut ut adipisicing elit do consequat ullamco anim velit nulla proident do reprehenderit enim proident est sint ex in pariatur qui magna ad cupidatat commodo ad Excepteur sit exercitation consequat amet eu voluptate dolor cillum velit nulla cupidatat dolor sit in ea aliqua fugiat ut incididunt deserunt laboris adipisicing qui minim sunt deserunt ea Duis aliqua id mollit Ut consectetur nulla amet reprehenderit cillum cillum sunt deserunt non nostrud amet exercitation dolor elit irure eu in consectetur.</p>
+                    </div>
+                    <div class='tab-pane fade' id="{{ 'author' + contribution.db_data.id}}">
+                        <div class='row'>
+                          <div class='col-sm-4'>
+                            <img src={{users[contribution.db_data.createdBy].avatar}} style='width: 100px; height: 100px;'>
+                          </div>
+                          <div class='col-sm-8'>
+                              <h3>{{ users[contribution.db_data.createdBy].name }}</h3>
+                              <p>{{ users[contribution.db_data.createdBy].nusOpenId }}</p>
+                              <p>{{user.id}}-{{contribution.db_data.createdBy}}</p>
+                          </div>
+                        </div>
+                    </div>
+<!--                     <button type="button" ng-click="scrollTo()" class="btn btn-primary btn-block" data-dismiss="modal">Close</button> -->
+                    </div>
                   </div>
                 </div>
+
+                <div class='editor' ng-show='showCreateContribution'>
+                    <br>
+                    <label> Contribution Title: </label>
+                    <br>
+                    <input class='wide' value='Title' ng-model="contributionData.title"></input>
+                    <br><br>
+                    <label> Contribution Content: </label>
+                    <br>
+                    <textarea class='wide' rows="10" cols="70" ng-model="contributionData.body"></textarea>
+                    <br><br>
+                    <label for="singleSelect"> Relationship: </label>
+                    <select name="singleSelect" id="singleSelect" ng-model=contributionData.refType>
+                      <option ng-repeat="rel in relationships | filter: { src_type: 'contribution', 
+                                              target_type: 'contribution'}" 
+                                              value={{rel.name}}>{{rel.name}}</option>
+                    </select>
+                    <br><br>
+                    <label> Tags: </label><br>
+                    <select class='tag-list' rows="10" ng-model="contributionData.tags" multiple>
+                      <option ng-repeat="tag in tags" value="{{tag.name}}">{{tag.name}}</option>
+                    </select>
+
+                    <input class="addTag" ng-model="tag"></input><button ng-click="contributionData.tags.push(tag)" class='btn btn-default modal-button'>Add a Tag</button>
+                    <br>
+                    <span><b> Selected tag names:  </b></span> 
+                    <span>{{ contributionData.tags }}</span>
+                    <br>
+                    <button type="button" ng-click="contributionData.ref=contribution.db_data.id;
+                    createContribution(contributionData); showCreateContribution=false; hideReplyButton=false" class="btn btn-default modal-button">Submit</button>
+                </div>
+
+            </div>
+            <div class='modal-footer'>
+              <div class='col-sm-12'>
+                <center>
+                  <button type="button" ng-hide='hideReplyButton' ng-click="showCreateContribution=true; hideReplyButton=true; contributionData={};contributionData.tags=[]" class="btn btn-default modal-button">Reply</button>
+                  <button type="button" ng-show='hideReplyButton' ng-click="showCreateContribution=false; hideReplyButton=false" class="btn btn-default modal-button">Cancel</button>
+                  <button type="button" ng-click="updateContribution()" class="btn btn-default modal-button"
+                  ng-if='{{user.id == contribution.db_data.createdBy}}'>Update</button>
+                  <button type="button" ng-click="deleteContribution(contribution.db_data.id)" class="btn btn-default modal-button"
+                  ng-if='{{parseInt(user.id) == parseInt(contribution.db_data.createdBy)}}'>Delete</button>
+                </center>
               </div>
-            <div class='col-sm-2'>
-              <div>
-<!--                 <div id='second-cy'></div> -->
-                <button type="button" ng-hide='hideReplyButton' ng-click="showCreateContribution=true; hideReplyButton=true; contributionData={};contributionData.tags=[]" class="btn btn-primary">Reply to...</button>
-                <button type="button" ng-show='hideReplyButton' ng-click="showCreateContribution=false; hideReplyButton=false" class="btn btn-primary">Cancle</button>
-                <button type="button" ng-click="updateContribution()" class="btn btn-primary">Update</button>
-                <button type="button" ng-click="deleteContribution(contribution.db_data.id)" class="btn btn-primary">Delete</button>
-              </div>
+
             </div>
           </div>
-          <div class='editor' ng-show='showCreateContribution'>
-                <br>
-                <label> Contribution Title: </label>
-                <br>
-                <input class='wide' value='Title' ng-model="contributionData.title"></input>
-                <br><br>
-                <label> Contribution Content: </label>
-                <br>
-                <textarea class='wide' rows="10" cols="70" ng-model="contributionData.body"></textarea>
-                <br><br>
-                <label for="singleSelect"> Relationship: </label>
-                <select name="singleSelect" id="singleSelect" ng-model=contributionData.refType>
-					        <option ng-repeat="rel in relationships | filter: { src_type: 'contribution', 
-					      													 target_type: 'contribution'}" 
-					      													 value={{rel.name}}>{{rel.name}}</option>
-					      </select>
-                <br><br>
-                <label> Tags: </label><br>
-                <select class='tag-list' rows="10" ng-model="contributionData.tags" multiple>
-                  <option ng-repeat="tag in tags" value="{{tag.name}}">{{tag.name}}</option>
-                </select>
-
-                <input class="addTag" ng-model="tag"></input><button ng-click="contributionData.tags.push(tag)">Add a Tag</button>
-                <br>
-                <span><b> Selected tag names:  </b></span> 
-						    <span>{{ contributionData.tags }}</span>
-                <br>
-                <button type="button" ng-click="contributionData.ref=contribution.db_data.id;
-                createContribution(contributionData); showCreateContribution=false; hideReplyButton=false" class="btn btn-primary">Submit</button>
-          </div>
         </div>
+      </div>
     </div>
   </div>
 </div>

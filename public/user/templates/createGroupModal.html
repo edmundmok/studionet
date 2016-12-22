@@ -1,0 +1,105 @@
+<!--- 'Create' Modal -->
+<div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    
+   
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">New Group</div>
+      </div>
+      <div class="modal-body">
+
+        <!-- alert -->
+        <div class="alert alert-danger" role="alert" id='errorMsg' ng-show='groupError'>
+                <strong>Oh snap! </strong>Change the group name and try submitting again.
+            </div>
+
+        <div class="alert alert-success" role="alert" id='successMsg' ng-show='groupCreated'>
+                <strong>Awesome! </strong>You created a group! 
+        </div>     
+
+        <!-- group creation form -->
+        <div class='row' ng-hide='groupCreated'>
+          <!-- Body for Creating -->         
+          <div class="section">
+              <div class="section-body">
+
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <label class="control-label">Name</label>
+                    <p class='control-label-help'>( name of the group  )</p>
+                  </div>
+                  <div class="col-sm-12">
+                    <input type="text" class="form-control" placeholder="" ng-model='group.name' maxlength="20">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <label class="control-label">Description</label>
+                    <p class='control-label-help'>( short description of group, max 100 characters  )</p>
+                  </div>
+                  <div class="col-sm-12">
+                    <textarea class="form-control" ng-model='group.description' maxlength="100"></textarea>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class='col-sm-12'>
+                    <label class="control-label">Group Type</label>
+                    <p class='control-label-help'>( open groups can be freely joined by other members )</p>
+                  </div>
+                  <div class="col-sm-12"> 
+                    <div class='radio radio-inline'>
+                      <input type='radio' name='restricted' id='open' ng-model='group.restricted' value=false>
+                      <label for='open'>Open</<label>
+                    </div>
+                    <div class='radio radio-inline'>
+                      <input type='radio' name='restricted' id='closed' ng-model='group.restricted' value=true>
+                      <label for='closed'>Closed</<label>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+          <div class='button-group' ng-hide='groupCreated'>
+              <!-- buttons -->
+              <!-- Save -->
+              <button type="button" class="btn btn-default modal-button" ng-click=createGroup() ng-disabled='!(group.name && group.restricted)'>
+                  Create
+              </button>
+
+              <!-- Cancel -->
+              <button type="button" class="btn btn-default modal-button" data-dismiss="modal">
+                Cancel
+              </button>
+          </div>
+
+          <div class='button-group' id='groupSuccess' ng-show='groupCreated'>
+              <!-- buttons -->
+              <!-- Edit -->
+              <button type="button" class="btn btn-default modal-button" ng-click=editGroup() data-dismiss="modal">
+                  Edit Group
+              </button>
+
+              <!-- Cancel -->
+              <button type="button" class="btn btn-default modal-button" data-dismiss="modal">
+                Close
+              </button>
+          </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

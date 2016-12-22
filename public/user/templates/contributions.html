@@ -1,0 +1,32 @@
+<!-- Stylesheet for graph -->
+<link rel='stylesheet' href='./stylesheets/graph-style.css' />
+
+<!-- actual graph container -->
+<div class='graph-container' ng-init='graphInit()'> 
+
+  <!--Nav Bar with Filters-->
+  <ng-include src="'templates/filters.html'"></ng-include>
+
+  <div id='cy'></div>
+  
+  <div class='graph-controls'>
+		<!-- reset graph -->
+		<i class="graph-nav-control icon fa fa-expand" ng-click='resetGraph()'></i>
+
+		<!-- create a contribution -->
+		<i class="graph-nav-control icon fa fa-plus" ng-click='createNewContribution()'></i>
+  </div>
+   
+</div>
+
+<!-- Modal -->
+<ui-view></ui-view>
+
+
+
+
+
+
+
+
+

@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/09ad2a19bf054da99c23a46d0be78b79)](https://www.codacy.com/app/edmundmok/studionet?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=edmundmok/studionet&amp;utm_campaign=Badge_Grade)
+
 # studionet
 Social networking for documents
 

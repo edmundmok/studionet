@@ -9,27 +9,68 @@
           </button>
         </li>
         <li class="logo">
-          <a class="navbar-brand" href="#"><span class="highlight">StudioNET</span> User</a>
+          <a class="navbar-brand" href="#"><span class="highlight">Studionet</span> User</a>
         </li>
         <li>
-          <button type="button" class="navbar-toggle">
-            <img class="profile-img" src="../template/html/assets/images/profile.png">
-          </button>
+          <div class='icon'>
+            <button type="button" class="navbar-toggle">
+              <img class="profile-img" src="../template/html/assets/images/profile.png">
+            </button>
+          </div>
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-left">
-        <li class="navbar-title"><span class="highlight">Studio</span><span>NET</span></li>
-        <li class="navbar-search hidden-sm">
-          <input ng-model='textFilter' id="search" type="text" placeholder="Search..">
-          <button class="btn-search" ng-click='textSearchFilter(textFilter)' ng-if='!searchActive'><i class="fa fa-search"></i></button>
-          <button class="btn-search" ng-click='clearSearch()' ng-if='searchActive'><i class="fa fa-close"></i></button>
+        <li class="navbar-title">Studionet</li>
+        <li class="navbar-search hidden-sm" ng-if=graph>
+          <input ng-model='textFilter.text' id="search" type="text" placeholder="Search..">
+          <button class="btn-search" ng-click='textSearchFilter(textFilter.text)' ng-if='!textFilter.active'><i class="fa fa-search"></i></button>
+          <button class="btn-search" ng-click='clearSearch()' ng-if='textFilter.active'><i class="fa fa-close"></i></button>
           </input>
         </li>
       </ul>
+      <ul class="nav navbar-nav navbar-right" id="noDropdown">
+        <li class="dropdown notification warning">
+          <a ui-sref="contributions" class="dropdown-toggle" data-toggle="dropdown">
+            <div class="icon"><i class="fa fa-pencil" aria-hidden="true"></i></div>
+            <div class="title">Contributions</div>
+          </a>
+        </li>
+        <li class="dropdown notification warning">
+          <a ui-sref="groups" class="dropdown-toggle" data-toggle="dropdown">
+            <div class="icon"><i class="fa fa-users" aria-hidden="true"></i></div>
+            <div class="title">Groups</div>
+          </a>
+        </li>
+
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown profile">
-          <a ui-sref="home.userDetails" class="dropdown-toggle"  data-toggle="dropdown">
-            <img class="profile-img" src="http://placehold.it/80x80">
+        <li class="dropdown notification warning">
+          <a ui-sref="groups" class="dropdown-toggle" data-toggle="dropdown">
+            <div class="icon"><i class="fa fa-filter" aria-hidden="true"></i></div>
+            <div class="title">Filters</div>
+          </a>
+          <div class="dropdown-menu">
+            <div class="profile-info">
+              <h4 class="username">Saved Filters</h4>
+            </div>
+            <ul class="action" ng-show="{{ filterNames.length == 0 || filterNames == undefined }}">
+              <li>
+                <a href="#">
+                  No filters found
+                </a>
+              </li>
+            </ul>
+            <ul class="action" ng-repeat='filter in filterNames' ng-hide="{{ filterNames.length == 0 || filterNames == undefined }}">
+              <li>
+                <a href="{{ filters_ref[$index] }}">
+                  {{ filter }} <small class='pull-right'>{{ filters[$index] }}</small>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="dropdown notification warning">
+          <a ui-sref="profile" class="dropdown-toggle" data-toggle="dropdown">
+            <div class="icon"><i class="fa fa-user" aria-hidden="true"></i></div>
             <div class="title">Profile</div>
           </a>
           <div class="dropdown-menu">
@@ -38,13 +79,8 @@
             </div>
             <ul class="action">
               <li>
-                <a ui-sref="user.details">
+                <a ui-sref="profile">
                   Profile
-                </a>
-              </li>
-              <li>
-                <a ui-sref="user.groups">
-                  Groups
                 </a>
               </li>
               <li>
@@ -60,62 +96,7 @@
             </ul>
           </div>
         </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown notification warning">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <div class="icon"><i class="fa fa-pencil" aria-hidden="true"></i></div>
-            <div class="title">New Contributions</div>
-            <div class="count">3</div>
-          </a>
-          <div class="dropdown-menu">
-            <ul>
-              <li class="dropdown-header">Contribution</li>
-              <li>
-                <a href="#">
-                  <span class="badge badge-warning pull-right">10</span>
-                  <div class="message">
-                    <img class="profile" src="https://placehold.it/100x100">
-                    <div class="content">
-                      <div class="title">"Houdini Installed.."</div>
-                      <div class="description">Alan Anderson</div>
-                    </div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <span class="badge badge-warning pull-right">5</span>
-                  <div class="message">
-                    <img class="profile" src="https://placehold.it/100x100">
-                    <div class="content">
-                      <div class="title">"Hello World"</div>
-                      <div class="description">Marco  Harmon</div>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <span class="badge badge-warning pull-right">2</span>
-                  <div class="message">
-                    <img class="profile" src="https://placehold.it/100x100">
-                    <div class="content">
-                      <div class="title">"39 Strange Habits Most Architects Can Relate To"</div>
-                      <div class="description">Brenda Lawson</div>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li class="dropdown-footer">
-                <a href="#">View All <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-              </li>
-            </ul>
-          </div>
-        </li>
-<!--         <li class="navbar-search hidden-sm">
-          <input id="search" type="text" placeholder="Search..">
-          <button class="btn-search"><i class="fa fa-search"></i></button>
-        </li> -->
+
       </ul>
     </div>
   </div>

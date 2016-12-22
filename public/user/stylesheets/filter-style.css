@@ -1,98 +1,25 @@
-.app-container{
-	//background-color: red;
-	width: 90%;
-	margin-left: 5%;
-	padding-left: 0px !important;
-	overflow-y: hidden;
-}
-
-aside.app-sidebar{
-
-	height: auto;
-	min-height: 100px;
-	max-height: 80vh;
-	overflow-y: visible;
-	
-	padding-left: 30px;
-	//padding: 0px !important; 
-
-	min-width: 200px; 
-	top: 90px;
-	left: 0;
-
-	text-align: left;
-
-
-	background-color: rgba(0,0,0,0);
-	box-shadow: none;
-}
-
-ul.sidebar-nav{
-	padding: 0px !important;
-	max-height: 600px;
-	overflow-y: visible;
-}
-
-
 /*
  *	Graph Filters 
  */
- #searchTextResults{
- 	margin-left:-50px;
+
+ #filters{
+ 	position: fixed;
+ 	top: 50px;
+ 	width: calc(100% - 100px);
+
+ 	z-index: 4;
+ 	margin: 0px 50px !important;
  }
-
- .subgroups{
- 	margin-left: 20%;
- }
-
- .filter-panel{
- 	margin-left: 10px;
- 	margin-right: 1px;
- 	margin-bottom: 0px;
- 	font-size: 12px;
- 	width: 180px;
- 	position: relative;
- }
-
- .filter-heading{
-  	padding: 2px;	
-  	background-color: #ADD8E6;
-	color: black;
-	cursor: pointer;
- }
-
-
- /*** Other Css ***/
 
 .filter-panel{
-	min-width: 210px;
-	width: auto;
-	border: none;
-	border-radius: 0px;
-	overflow-x: visible;
+	background-color: #C1BCBC;
+	margin-bottom: 0px !important;
 }
 
-.panel{
-	border: none;
-}
-
-#filters{
-	max-width: 200px;
-	//max-height: 600px !important;
-	overflow-y: visible;
-}
 
 .filter-heading{
-	background-color: #7D7777;
-	color: white;
-	text-align: center;
-}
-
-#filter-btn{
-	background-color: #BBBBBB;
-	color: black;
-	text-transform: uppercase;
-	border: 1px solid black;
+	cursor: pointer;
+	line-height: 30px;
 }
 
 div.tree-control{
@@ -112,8 +39,12 @@ div.tree-control .tree-view ul .tree-checkbox{
 }
 
 div.tree-control .tree-view li{
-	margin-left: 25px !important;
+	margin-left: 15px !important;
 	min-width: 350px;
+}
+
+.tree-control .clear-button{
+	top: 3px;
 }
 
 .filter-panel input{
@@ -138,4 +69,28 @@ div.tree-control .tree-view li{
 .ranger-marker{
 	width: 20px !important; 
 	height: 20px !important;
+}
+
+.filter-element-count{
+	font-size: 12px;
+	border: 1px solid black;
+	padding: 0px 2px;
+
+	float: right;
+}
+
+.filter-btn{
+	background-color: #8C8A8A;
+	text-align: center;
+	border: 1px solid black;
+	color: #ddd;
+}
+
+
+#searchTextResults{
+	margin-left:-50px;
+}
+
+.subgroups{
+	margin-left: 20%;
 }

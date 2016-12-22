@@ -1,0 +1,145 @@
+<!--- Edit Modal -->
+<div class="modal fade" id="editGroupModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title">Editing {{ activeGroup.name }}</h4>
+      </div>
+    
+      <div class="modal-body">
+        
+        <!-- alert -->
+        <div class="alert alert-danger" role="alert" id='errorMsg' ng-show='status.value == false'>
+                <strong>Oh snap! </strong> {{status.msg}}
+        </div>
+
+        <div class="alert alert-success" role="alert" id='successMsg' ng-show='status.value == true'>
+                <strong>Awesome! </strong> {{status.msg}}
+        </div>  
+        
+        <uib-tabset active="active" ng-show='status.value == undefined'>
+
+              <uib-tab index="0" heading="About the group">
+                
+                <div class='row'>
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">Name</label>
+                    <div class="col-md-9">
+                      <input type="text" class="form-control" placeholder="" ng-model='activeGroup.name'>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-md-3">
+                      <label class="control-label">Description</label>
+                    </div>
+                    <div class="col-md-9">
+                      <textarea class="form-control" ng-model='activeGroup.description'></textarea>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">Type</label>
+                    <div class="col-md-9"> 
+                      <select class="col-md-9" ng-model='activeGroup.restricted'> 
+                        <option value=false>Open Group</option>
+                        <option value=true>Closed Group</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+
+              </uib-tab>
+              
+              <uib-tab index="1" heading="Members"> 
+                  <div class='height-400'>
+                      <div class='row user-row' ng-repeat='user in members | filter: user.role'>
+                        <div class='col-sm-2'><img class='user-avatar' src="{{user.avatar}}"></div>
+                        <div class='col-sm-4 user-list-name'>{{user.name}}</div>
+<!--                         <div class='col-sm-1 user-list-name'>{{user.role}}</div> -->
+                        <div class='col-sm-1 user-list-name'>
+                            <button class="btn btn-link" ng-show='isMember(user.id) == true' ng-click='remove(user.id)'>
+                                <i class='icon fa fa-user-times'></i>
+                            </button>
+                            <button class="btn btn-link" ng-show='isMember(user.id) == false' ng-click='add(user.id)'>
+                               <i class='icon fa fa-user-plus'></i>
+                            </button>
+                        </div>
+                      </div>
+                  </div>
+              </uib-tab>
+
+        </uib-tabset>
+
+
+
+      </div>
+
+      <!-- footer -->
+      <div class='modal-footer'>
+          
+            <div class='button-group'>
+                <!-- buttons -->
+
+                <!-- Save -->
+                <button type="button" class="btn btn-default modal-button" ng-click=saveGroup() ng-hide='status.value==true'>Save</button>
+
+                <!-- Close -->
+                <button type="button" class="btn btn-default modal-button" ng-click=reset() data-dismiss='modal'>Close</button>
+                
+            </div>
+      
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<!--- Add Users Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title">{{activeGroup.name}} Members</h4>
+      </div>
+
+      <div class="modal-body height-400">
+        <div class='row'>
+          <div class="col-xs-12">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>NUS OpenID</th>
+                  <th>Name</th>
+                  <th>Member</th>
+                </tr>
+              </thead>
+              <tbody ng-repeat="user in users">
+                <tr ng-click="addUser(user)">
+                  <th>{{user.nusOpenId}}</th>
+                  <th>{{user.name}}</th>
+                  <th>{{user.status}}</th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class='modal-footer'>
+        <!-- buttons -->
+            
+          <!-- Close -->
+          <button type="button" class="btn btn-sm btn-default pull-right" data-dismiss="modal"> Close </button>
+
+      </div>
+
+
+    </div>
+  </div>
+</div>

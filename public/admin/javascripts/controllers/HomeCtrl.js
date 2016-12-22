@@ -1,7 +1,9 @@
 angular.module('studionetAdmin')
 
-.controller('HomeCtrl', ['$scope', '$http', 'groups', 'users', 'tags', 'contributions', function($scope, $http, groups, users, tags, contributions){
+.controller('HomeCtrl', ['$scope', '$http', 'groups', 'users', 'tags', 'contributions', 'CONFIG', function($scope, $http, groups, users, tags, contributions, CONFIG){
 	
+  $scope.app_name = "Studions";
+
 	$scope.users = users.users;
 	$scope.tags = tags.tags;
 	$scope.contributions = contributions.contributions;

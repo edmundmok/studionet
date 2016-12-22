@@ -1,27 +1,38 @@
+var STUDIONET = {};
+STUDIONET.GRAPH = {};
+
 /*
- *  Cytoscape Styles
+ * qTip format for hover functions
+ *
  */
-var SUPERNODE_SHAPE = "ellipse";
-var SUPERNODE_WIDTH = 45, SUPERNODE_HEIGHT = 45;
-var SUPERNODE_COLOR = "#000";
-
-
-var MODULE_SHAPE = "rectangle";
-var USER_SHAPE = "ellipse"
-var CONTRIBUTION_SHAPE = "ellipse"
-
-var MODULE_WIDTH = 15, MODULE_HEIGHT = 15;
-var USER_WIDTH = 20, USER_HEIGHT = 20; 
-var CONTRIBUTION_WIDTH = 15, CONTRIBUTION_HEIGHT = 15;
-
-var MODULE_COLOR = "#FB95AF";
-var USER_COLOR = "#DE9BF9";
-var CONTRIBUTION_COLOR = "#D02F2F";
-
-var EDGE_DEFAULT_COLOR = "#B7B6B6";
-var EDGE_SELECTED_COLOR = "blue";
-var EDGE_DEFAULT_STRENGTH = 3;
-var EDGE_DEFAULT_WEIGHT = 3;
+STUDIONET.GRAPH.qtipFormat = function(evt){
+  return {
+     content: { title: "", text:""  },
+     show: {
+        evt: evt.type,
+        ready: true,
+        solo: true
+     },
+     hide: {
+        evt: 'mouseout',
+     },
+     position: {
+        //container: $('div.graph-container'),
+        my: 'top left',
+        at: 'center center'
+     },
+     events: {
+                    //this hide event will remove the qtip element from body and all assiciated events, leaving no dirt behind.
+                    hide: function(event, api) {
+                        api.destroy(true); // Destroy it immediately
+                    }
+     },
+     style: {
+        classes: 'qTipClass',
+        width: 200 // Overrides width set by CSS (but no max-width!)
+     }
+  }
+}
 
 /*
  * Layout options
@@ -30,84 +41,53 @@ var COLA_GRAPH_LAYOUT = { name : 'cola', padding: 10 };
 var GRID_GRAPH_LAYOUT = { name : 'grid' };
 var DAGRE_GRAPH_LAYOUT = { name : 'dagre' };
 var CIRCLE_GRAPH_LAYOUT = { name : 'circle' };
-var COSE_GRAPH_LAYOUT = { name: 'cose',
-                          padding: 15, 
-                          randomize: true };
+var COSE_GRAPH_LAYOUT = { name: 'cose', padding: 15, randomize: true };
 var CONCENTRIC_GRAPH_LAYOUT = {  name: 'concentric', 
-        concentric: function( node ){
-          return node.degree();
-        },
-        levelWidth: function( nodes ){
-          return 1;
-        }};
-
-
+                                  concentric: function( node ){
+                                    return node.degree();
+                                  },
+                                  levelWidth: function( nodes ){
+                                    return 1;
+                                  }};
 /*
  * Cytoscape Specific Styles
  */
 var graph_style = {
-      
-      container: document.getElementById('cy'),
 
-      ready: function(){
-                          window.cy = this;
-
-                          //giddy up
-                        },
-      
-      layout: COLA_GRAPH_LAYOUT,
-      
       hideLabelsOnViewport: false,
+
+      layout: COLA_GRAPH_LAYOUT,
       
       style: 
         cytoscape.stylesheet()
           
           .selector('node')
             .css({
-              'shape': 'data(faveShape)',
-              'width': 'data(width)', 
-              'height': 'data(height)',   // mapData(property, a, b, c, d)  => specified range a, b; actual values c, d
-              'text-valign': 'center',
-              'font-size':'10%',
-              'background-color': 'data(faveColor)',
-              'border-color': 'data(faveColor)',
+              'text-valign': 'bottom',
+              'font-size':'1em',
+              'font-weight': '300',
+              'border-color': '#222',
               'content' : 'data(name)',
               'text-wrap' : 'wrap',
-              'text-max-width': '80',
+              'text-max-width': '100',
               'text-valign': 'bottom',
-              //'background-image': 'data(icon)',
-              //'background-width': 'data(width)',
-              //'background-height': 'data(height)'
             })
+
+          .selector('edge')
+            .css({
+              'curve-style': 'bezier',
+              'target-arrow-shape': 'triangle',
+              //'content' : 'data(name)',
+              'color': '#222',
+              'edge-text-rotation': 'autorotate',
+            })     
            
           .selector('.selected')
             .css({
               'border-width': 3.5,
               'border-color': '#333',
-              'width': 20, 
-              'height': 20,
               'font-size': '15%'
             })
-          
-          .selector('edge')
-            .css({
-              'curve-style': 'bezier',
-              'width': 'mapData(weight, 0.1, 3, 1, 7)', 
-              'target-arrow-shape': 'triangle',
-              'line-color': 'data(faveColor)',
-              'source-arrow-color': 'data(faveColor)',
-              'content' : 'data(name)',
-              'font-size':'7%',
-              'color': '#222',
-              'edge-text-rotation': 'autorotate',
-              'target-arrow-color': 'data(faveColor)'
-            })
-
-          .selector('edge')
-            .style({
-
-            })
-            
           
           .selector('.faded')
             .css({
@@ -120,10 +100,7 @@ var graph_style = {
               'line-color': 'green',
               'target-arrow-color':'green',
               'background-color': 'blue',
-              
-            })
-            .style({
-              'content': 'data(label)'
+              'border-width': 3.5              
             })
 
           .selector('.searched')
@@ -133,94 +110,128 @@ var graph_style = {
               'background-color': 'blue',
               'border-width': 0.5,
               'border-color': '#333',
-              'width': 'data(width) + 10', 
-              'height': 'data(height) + 10'              
             })
 
 }
 
-
 /*
  * Converts normal node from backend into cytoscape-specific format
  */
-var createGraphNode = function(node){
-
-    var data = node;
-    
-    //console.log( id);
-    if( node.superNode ){
-          node.faveShape = SUPERNODE_SHAPE;
-          node.faveColor = SUPERNODE_COLOR;
-          node.width = SUPERNODE_WIDTH;
-          node.height = SUPERNODE_HEIGHT;      
-    }
-    else if(node.type=="module"){
-          node.faveShape = MODULE_SHAPE;
-          node.faveColor = MODULE_COLOR;
-          node.width = MODULE_WIDTH;
-          node.height = MODULE_HEIGHT;
-          node.icon = 'url(./img/module1.png)'//'url(../../img/worldwide.svg)';
-    }
-    else if(node.type=="user"){ 
-          node.faveShape = USER_SHAPE;
-          node.faveColor = USER_COLOR;
-          node.width = USER_WIDTH;
-          node.height = USER_HEIGHT;
-    }
-    else if(node.type=="contribution"){
-
-          node.faveShape = CONTRIBUTION_SHAPE;
-          node.faveColor = CONTRIBUTION_COLOR;
-          node.width = CONTRIBUTION_WIDTH;
-          node.height = CONTRIBUTION_HEIGHT;
-
-          if(node.name == 'StudioNET'){
-             node.width = CONTRIBUTION_WIDTH + 10;
-             node.height = CONTRIBUTION_HEIGHT + 10;
-             node.faveColor = "#222";
-          }
-    }
-    else {
-          node.faveShape = CONTRIBUTION_SHAPE;
-          node.faveColor = CONTRIBUTION_COLOR;
-          node.width = CONTRIBUTION_WIDTH;
-          node.height = CONTRIBUTION_HEIGHT;
-          node.icon = 'url()' //'url(../../img/zoom-in.svg/)';
-    }
-   
-
-    return  { data: node };
-}
+var createGraphNode = function(node){    return  { data: node };   }
 
 /*
  * Converts normal edge from backend into cytoscape-specific format
  */
-var createGraphEdge = function(edge){
+var createGraphEdge = function(edge){    return { data: edge };   }
 
-    edge.strength = EDGE_DEFAULT_STRENGTH;
-    edge.faveColor = EDGE_DEFAULT_COLOR;
-    edge.weigth = EDGE_DEFAULT_WEIGHT;
-    edge.label = edge.type;
 
-    return { data: edge };
-
+/*
+ * Helper Functions
+ * Stackoverflow source
+ */
+function randomColors(total){
+    var i = 360 / (total - 1); // distribute the colors evenly on the hue range
+    var r = []; // hold the generated colors
+    for (var x=0; x<total; x++)
+    {
+        r.push(hsvToRgb(i * x, 100, 100)); // you can also alternate the saturation and value for even more contrast between the colors
+    }
+    return r;
 }
+
+function hsvToRgb(h, s, v) {
+  var r, g, b;
+  var i;
+  var f, p, q, t;
+ 
+  // Make sure our arguments stay in-range
+  h = Math.max(0, Math.min(360, h));
+  s = Math.max(0, Math.min(100, s));
+  v = Math.max(0, Math.min(100, v));
+ 
+  // We accept saturation and value arguments from 0 to 100 because that's
+  // how Photoshop represents those values. Internally, however, the
+  // saturation and value are calculated from a range of 0 to 1. We make
+  // That conversion here.
+  s /= 100;
+  v /= 100;
+ 
+  if(s == 0) {
+    // Achromatic (grey)
+    r = g = b = v;
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+  }
+ 
+  h /= 60; // sector 0 to 5
+  i = Math.floor(h);
+  f = h - i; // factorial part of h
+  p = v * (1 - s);
+  q = v * (1 - s * f);
+  t = v * (1 - s * (1 - f));
+ 
+  switch(i) {
+    case 0:
+      r = v;
+      g = t;
+      b = p;
+      break;
+ 
+    case 1:
+      r = q;
+      g = v;
+      b = p;
+      break;
+ 
+    case 2:
+      r = p;
+      g = v;
+      b = t;
+      break;
+ 
+    case 3:
+      r = p;
+      g = q;
+      b = v;
+      break;
+ 
+    case 4:
+      r = t;
+      g = p;
+      b = v;
+      break;
+ 
+    default: // case 5:
+      r = v;
+      g = p;
+      b = q;
+  }
+ 
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
 
 /*
  * Makes the actual graph and defines functionality on the nodes and edges
+ * Arguments - 
+ *      data - Graph Data
+ *      graphContainer - HTML Container for the graph
+ *      graphFn - Conversion of nodes in data to cytoscape nodes
+ *      edgeFn - Conversion of edges in data to cytoscape edges
+ *      graphStyle - Graph Style 
  */
-var makeGraph = function(data, graphContainer, graphFn, edgeFn){
-
-    console.log("In graph-helper.js");
+STUDIONET.GRAPH.makeGraph = function(data, graphContainer, graphLayout, graphFn, edgeFn){
 
     // if cytoscape canvas is defined, assign that
     if(arguments[1] != undefined)
       graph_style.container = document.getElementById(arguments[1]);
 
     if(arguments[2] != undefined)
-      createGraphNode = graphFn; 
+      graph_style = graphLayout; 
 
     if(arguments[3] != undefined)
+      createGraphNode = graphFn; 
+
+    if(arguments[4] != undefined)
       createGraphEdge = edgeFn;
 
     graph_style.elements = {
@@ -228,13 +239,5 @@ var makeGraph = function(data, graphContainer, graphFn, edgeFn){
         edges: data.links.map( function(edge){ return createGraphEdge(edge) } )
     }
 
-    graph_style.layout = COLA_GRAPH_LAYOUT;
-
-    cy = cytoscape( graph_style );
-
-    var winWidth = window.innerWidth/2;
-    var winHeight = window.innerHeight/2;
-
-    return cy;
-    
+    return cytoscape( graph_style );
 }

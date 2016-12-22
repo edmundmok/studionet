@@ -1,3 +1,22 @@
+.modal {
+    width: 100%;
+
+}
+
+.modal-dialog {
+    width: 100%;
+    margin: 20px 0px 50px 0px;
+    padding-right: 20px;
+}
+
+.sidebar{
+    width: 100%;
+    margin: 20px 0px 0px 0px;
+    position: fixed;
+    width: 300px;
+    height: 200px;
+}
+
 .modal h3{
 
     font-size: 14px;
@@ -12,15 +31,20 @@
 }
 
 .modal span{
-
     font-size: 12px;
     font-style: italic;
     line-height: 20px;
     text-transform: none;
 }
 
+.modal-dialog-container{
+    height: 1000px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .modal-header{
-text-align: center;
+    text-align: center;
 }
 
 select, input{
@@ -41,4 +65,12 @@ input.addTag{
     width: 250px; 
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.modal-backdrop {
+   background-color: rgba(0,0,0,0.2);
+}
+
+.modal-backdrop .in {
+    opacity: 0.9 !important;
 }

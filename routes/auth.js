@@ -11,69 +11,17 @@ var db = require('seraph')({
 //   the request will proceed.  Otherwise, the user will be redirected to the
 //   login page.
 module.exports.ensureAuthenticated = function(req, res, next) {
-	
+  
   if (req.isAuthenticated()) { 
-  	return next(); 
+    return next(); 
   }
   res.redirect('/denied');
   
-};
-
-module.exports.isStudent = function(req, res, next){
-
-  var query = [
-    'MATCH (m:module)-[r:MEMBER]->(u:user) WHERE id(u)=' + req.user.id + ' AND id(m)=' + req.params.moduleId +
-    ' AND (r.role="Student" OR r.role="Admin" OR r.role="TA")',
-    'RETURN sign(count(r)) as mod'
-  ].join('\n');
-
-
-  db.query(query, function(error, result){
-    if (error)
-      console.log('error!');
-    else
-      console.log(result);
-
-    if (result[0].mod === 1)
-      return next();
-    else{
-      console.log('Not a moderator of the module: ' + req.params.moduleId);
-      res.redirect('/denied');
-    }
-
-  })
-
 }
-
-
-module.exports.isModerator = function(req, res, next){
-
-  var query = [
-    'MATCH (m:module)-[r:MEMBER]->(u:user) WHERE id(u)=' + req.user.id + ' AND id(m)=' + req.params.moduleId +
-    ' AND (r.role="Admin" OR r.role="TA")',
-    'RETURN sign(count(r)) as mod'
-  ].join('\n');
-
-  db.query(query, function(error, result){
-    if (error)
-      console.log('error!');
-    else
-      console.log(result);
-
-    if (result[0].mod === 1)
-      return next();
-    else{
-      console.log('Not a moderator of the module: ' + req.params.moduleId);
-      res.redirect('/denied');
-    }
-
-  })
-
-};
 
 // Super Admin authentication middleware
 module.exports.ensureSuperAdmin = function(req, res, next){
-	
+  
   if (req.user.superAdmin){
     return next();
   }
@@ -81,29 +29,35 @@ module.exports.ensureSuperAdmin = function(req, res, next){
 
 }
 
+module.exports.isGroupAdmin = function(req, res, next){
 
-// Group owner authentication middleware
-module.exports.ensureGroupOwner = function(req, res, next){
-  
   var query = [
-    'MATCH (m:group)-[r:MEMBER]->(u:user) WHERE id(u)=' + req.user.id + ' AND id(m)=' + req.params.groupId +
-    ' AND (r.role="Admin")',
+    'MATCH (g:group)-[r:MEMBER {role: "Admin"}]->(u:user)',
+    'WHERE id(u)={userIdParam} AND id(g)={groupIdParam}',
     'RETURN sign(count(r)) as mod'
   ].join('\n');
 
-  db.query(query, function(error, result){
-    if (error)
-      console.log('error!');
-    else
-      console.log(result);
+  var params = {
+    userIdParam: parseInt(req.user.id),
+    groupIdParam: parseInt(req.params.groupId)
+  };
 
-    if (result[0].mod === 1)
-      return next();
-    else{
-      console.log('Not a moderator of the module: ' + req.params.groupId);
-      res.redirect('/denied');
+  db.query(query, params, function(error, result){
+
+    if (error){
+      console.log('Error checking if user ' + req.user.id +  ' is a moderator of the module ' + req.params.groupId);
+      return res.redirect('/denied');
     }
 
-  })
+    var isModerator = parseInt(result[0].mod) === 1;
 
-}
+    if (!isModerator){
+      console.log('User ' + req.user.id + ' is not a moderator of the module ' + req.params.groupId);
+      return res.redirect('/denied');
+    }
+
+    return next();
+
+  });
+
+};

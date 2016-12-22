@@ -1,0 +1,36 @@
+<!-- Stylesheet for graph & modals -->
+<link rel='stylesheet' href='./stylesheets/graph-style.css' />
+<link rel='stylesheet' href='/user/stylesheets/groups-modal-style.css' />
+
+<!-- actual graph container -->
+<div class='graph-container' ng-init=graphInit()>
+
+  <div id='user-graph'></div>
+  
+  <div class='graph-controls'>
+    <!-- reset graph -->
+    <i class="graph-nav-control icon fa fa-expand" ng-click='resetGraph()'></i>
+
+    <!-- create a contribution -->
+    <i class="graph-nav-control icon fa fa-plus" ng-click='createGroup()'></i>
+
+  </div>
+
+
+   
+</div>
+
+<!--   <div class='info-popover'>
+      <h3 class='title'> Heading 1 </h3>
+      <p class='description'> Lorem ipsum Dolor aliquip ea occaecat dolor esse ut ex do eiusmod nulla sit incididunt ut mollit in ut laborum culpa ea ullamco eiusmod occaecat  ut id. </p>
+
+      <button class='btn btn-sm btn-link pull-right' data-target='#viewGroupModal'>View More</button>
+  </div> -->
+
+
+<!-- Include the Modal Templates -->
+<ng-include src="'templates/createGroupModal.html'" ng-controller='CreateGroupCtrl'></ng-include>
+<ng-include src="'templates/viewGroupModal.html'" ng-controller='ViewGroupCtrl'></ng-include>
+<ng-include src="'templates/editGroupModal.html'" ng-controller='EditGroupCtrl'></ng-include>
+
+<script type="text/javascript" src="../user/javascripts/graphs/graph-helper.js"></script>

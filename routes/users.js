@@ -14,7 +14,6 @@ router.route('/')
 
   // return all users
   .get(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
-    
     var query = [
       'MATCH (u:user)',
       'RETURN {id: id(u), name: u.name, avatar: u.avatar}'
@@ -28,28 +27,12 @@ router.route('/')
         res.send(result);
       }
     });
-
   })
 
   // add a new user
   .post(auth.ensureAuthenticated, function(req, res){
-
-    /*var query = [
-      'CREATE (u:user {'
-                       + 'nusOpenId: {nusOpenIdParam},'
-                       + 'canEdit: {canEditParam},'
-                       + 'name: {nameParam},'
-                       + 'isAdmin: {isAdminParam},'
-                       + 'addedBy: {addedByParam},'
-                       + 'addedOn: {addedOnParam},'
-                       + 'avatar: {avatarParam},'
-                       + 'joinedOn: {joinedOnParam},'
-                       + 'lastLoggedIn: {lastLoggedInParam}'
-                       +'})',
-      'RETURN u'
-    ].join('\n');*/
-
     
+    // TODO: Create constraint on nusOpenId
     var query = [
       'CREATE (u:user {\
                         nusOpenId: {nusOpenIdParam},\
@@ -60,7 +43,9 @@ router.route('/')
                         addedOn: {addedOnParam},\
                         avatar: {avatarParam},\
                         joinedOn: {joinedOnParam},\
-                        lastLoggedIn: {lastLoggedInParam}\
+                        lastLoggedIn: {lastLoggedInParam},\
+                        filters: {filtersParam},\
+                        filterNames: {filterNamesParam}\
                        })',
       'RETURN u'
     ].join('\n');
@@ -72,9 +57,11 @@ router.route('/')
       isAdminParam: req.body.isAdmin, 
       addedByParam: req.user.id,
       addedOnParam: Date.now(),
-      avatarParam: "/uploads/default/avatar",
+      avatarParam: "/assets/images/avatar.png",
       joinedOnParam: -1,  // -1 as default
-      lastLoggedInParam: -1 // -1 as default
+      lastLoggedInParam: -1, // -1 as default
+      filtersParam: [],
+      filterNamesParam: []
     };
 
     /*
@@ -105,47 +92,58 @@ router.route('/:userId')
 
   // return a user
   .get(auth.ensureAuthenticated, function(req, res){
-
     res.send('Placeholder');
   })
 
   // update a user
   .put(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
     var query = [
-      'MATCH (u:user) WHERE ID(u)=' + req.params.userId,
-      'SET u.name={nameParam}, u.nusOpenId={nusOpenIdParam}, u.canEdit={canEditParam}, u.year={yearParam}',
+      'MATCH (u:user) WHERE ID(u)={userIdToEditParam}',
+      'SET u.nusOpenId={nusOpenIdParam}, u.canEdit={canEditParam},',
+      'u.name={nameParam}, u.isAdmin={isAdminParam}',
       'RETURN u'
     ].join('\n');
 
     var params = {
-      nameParam: req.body.name,
+      userIdToEditParam: parseInt(req.params.userId),
       nusOpenIdParam: req.body.nusOpenId,
       canEditParam: req.body.canEdit,
-      yearParam: req.body.year,
+      nameParam: req.body.name,
+      isAdminParam: req.body.isAdmin, 
     };
 
     db.query(query, params, function(error, result){
-      if (error)
+      if (error){
         console.log('Error creating new user: ', error);
-      else
+      }
+      else{
+        console.log('[SUCCESS] User id ' + req.params.userId + ' edited.');
         res.send(result[0]);
+      }
     });
   })
 
   // delete a user
   .delete(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
     var query = [
-      'MATCH (u:user) WHERE ID(u)=' + req.params.userId,
-      'DELETE u'
+      'MATCH (u:user) WHERE ID(u)={userIdToDeleteParam}',
+      'OPTIONAL MATCH (u)-[r]-()',
+      'DELETE u,r'
     ].join('\n');
 
-    db.query(query, function(error,result){
-      if (error)
-        console.log('Error deleting user id: ' + req.params.userId);
-      else
-        res.send(result[0]);
+    var params = {
+      userIdToDeleteParam: parseInt(req.params.userId)
+    };
+
+    db.query(query, params, function(error,result){
+      if (error){
+        console.log(error);
+      }
+      else{
+        console.log('[SUCCESS] User id ' + req.params.userId + ' deleted.');
+        res.send('User id ' + req.params.userId + ' deleted.');
+      }
     })
   });
-
 
 module.exports = router;

@@ -1,5 +1,13 @@
 var app = angular.module('studionetAdmin', ['ui.router', 'ngResource', 'ngTagsInput']);
 
+app.constant('CONFIG', {
+    'APP_NAME' : 'Studionet',
+    'APP_VERSION' : '0.0.0'//,
+    //'GOOGLE_ANALYTICS_ID' : '',
+    //'BASE_URL' : '',
+    //'SYSTEM_LANGUAGE' : ''
+});
+
 app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', function($stateProvider, $urlRouterProvider, tagsInputConfigProvider){
 
 	// admin 'routes'

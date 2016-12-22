@@ -33,10 +33,6 @@ angular.module('studionetAdmin').controller('TestCtrl', ['$scope', '$http', func
 		});	
 
 
-		$scope.contributionData = { 'tags' : [] };
-		$scope.tag = "";		
-
-
 		$scope.groupData = { 
 		    name: "",
 			description: "",
@@ -53,7 +49,11 @@ angular.module('studionetAdmin').controller('TestCtrl', ['$scope', '$http', func
 	 *	To create simulated contributions
 	 * 
 	 */
-	$scope.contributionData = { 'tags' : [] };
+	//$scope.contributionData = { 'tags' : [], 'title': 'New Contribution', 'body': 'Lorem ipsum Laborum mollit elit tempor eu irure aliqua cillum nisi quis ex dolor aliquip anim exercitation eu aliquip et adipisicing esse ullamco pariatur esse exercitation consequat minim laborum officia voluptate ad elit deserunt ad amet et esse sunt nulla est enim consequat non consectetur Ut Ut dolore laborum id dolore commodo officia deserunt fugiat dolor proident esse occaecat sed labore dolor minim adipisicing ex dolore pariatur nostrud anim consequat esse incididunt nulla officia velit commodo ea velit cillum ea deserunt dolor magna reprehenderit laboris dolor cupidatat velit nulla dolore ut in minim Ut et esse nisi dolor non ex in dolor minim amet nisi cupidatat magna incididunt adipisicing qui dolore dolore et laboris in amet proident mollit sint sit aute qui fugiat nulla voluptate mollit veniam voluptate in in incididunt id sint id veniam est id veniam qui labore mollit proident Ut dolore laborum eu culpa laborum aliquip elit minim cillum ex nostrud id officia eiusmod Excepteur Duis quis veniam magna occaecat aliquip dolor nostrud occaecat consectetur nulla dolore sit nisi exercitation fugiat nostrud Duis ut cupidatat quis laborum officia magna voluptate sit in dolor in voluptate magna voluptate in minim commodo Excepteur in ad aliqua amet Ut Duis amet amet laborum consequat aliquip sit do ex nostrud fugiat id laborum minim culpa consequat elit.' };
+	//$scope.contributionData.createdAt = new Date();
+
+	$scope.contributionData = { 'tags': [] };
+
 	$scope.tag = "";
 	$scope.addTag = function(tag){
 
@@ -62,6 +62,8 @@ angular.module('studionetAdmin').controller('TestCtrl', ['$scope', '$http', func
 	}
 
 	$scope.createNewContribution = function(){
+
+		$scope.contributionData.contentType  = "text";
 
 		$http({
 				  method  : 'POST',
@@ -121,7 +123,8 @@ angular.module('studionetAdmin').controller('TestCtrl', ['$scope', '$http', func
 		    name: "",
 			nusOpenId: "",
 			addedBy: "",
-			addedOn: ""
+			addedOn: "",
+			isAdmin: false
 	};
 
 	$scope.createNewUser = function(){
@@ -137,7 +140,8 @@ angular.module('studionetAdmin').controller('TestCtrl', ['$scope', '$http', func
 						name :  user.name, 
 						nusOpenId: user.nusOpenId, 
 						addedBy: $scope.userData.addedBy,
-						addedOn: $scope.userData.addedOn
+						addedOn: $scope.userData.addedOn,
+						isAdmin: false
 					}
 					postUser(userData);
 
@@ -170,7 +174,27 @@ angular.module('studionetAdmin').controller('TestCtrl', ['$scope', '$http', func
 		}
 
 	}
-	
+
+	/*
+	 * 		Create new link
+	 */
+	$scope.linkData = {	};
+	$scope.createLink = function(){
+
+			$http({
+					  method  : 'POST',
+					  url     : '/api/relationships/',
+					  data    : $scope.linkData,  
+					  headers : { 'Content-Type': 'application/json' }  // set the headers so angular passing info as form data (not request payload)
+					 })
+					.success(function(data) {
+					    
+						alert("Link Created");  
+						refresh();  
+
+					})
+
+	}
 
 
 

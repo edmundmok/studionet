@@ -33,7 +33,7 @@ router.route('/')
 		// 											contribution belongs to you
 
 		// caller should send: 	req.body.source, req.body.target, req.body.relationshipName
-
+/*
 		switch(relationshipName){
 			case "LIKED":
 			case "VIEWED":
@@ -50,28 +50,37 @@ router.route('/')
 					return;
 				}
 				break;
-		}
+		}*/
 
 		// If VIEWED relationship already exists, just increment view count
 
 
 		// Create the relationship
 		var query = [
-			'MATCH (u:user) WHERE ID(u)=' + req.body.source,
-			'MATCH (c:contribution) WHERE ID(c)=' + req.body.target,
-			'MERGE (u)-[r:{relationshipParam}]->(c)',
+			'MATCH (u) WHERE ID(u)=' + parseInt(req.body.source),
+			'MATCH (c) WHERE ID(c)=' + parseInt(req.body.target),
+			'MERGE (u)-[r:' + req.body.relationshipName + ']->(c)',
 			'ON CREATE SET r.count = 1',
+			//'r.createdBy = {createdByParam}',
 			'ON MATCH SET r.count = coalesce(r.count, 0) + 1,',
 			'r.lastUpdated = ' + Date.now()
 		].join('\n');
 
+		// console.log(req.body);
+
 		var params = {
-			relationshipParam : req.body.relationshipName
+			relationshipParam : req.body.relationshipName,
+			createdByParam: req.user.id
 		}
+
+		/*
+		 * 	Overrides - only for testing; remove later
+		 */
+		params.createdByParam = req.body.createdBy || req.user.id;
 
 		db.query(query, params, function(error, result){
 			if (error)
-				console.log("error creating new relationships");
+				console.log(error);
 			else
 				res.send("success creating the new relationship");
 		})

@@ -225,3 +225,59 @@ select.tag-list{
 		</div>
 	</div>
 </div>
+
+<!-- Add cross links -->
+<div class='row'>
+	<div class="col-xs-12 col-sm-12">
+		<div class="card card-mini">
+			<div class="card-header">Contribution Linking</div>
+		    <div class="card-body">
+		    	<div class='row'>
+			    	<div class='col-sm-12'>
+						<label for="singleSelect"> By: </label>
+					    <select name="singleSelect" id="singleSelect" ng-model="linkData.createdBy">
+					      <option ng-repeat="user in users" value={{user.id}}>{{user.name}}</option>
+					    </select>
+
+					    <br><br>
+
+						<label for="singleSelect"> Source: </label>
+					    <select class='replyTo' name="singleSelect" id="singleSelect" ng-model="linkData.source">
+					      <option ng-repeat="contribution in contributions" value={{contribution.id}}>{{contribution.title}} ({{contribution.id}})</option>
+					    </select>
+
+					    <br><br>
+
+					    <label for="singleSelect" ng-if="linkData.ref"> Relationship: </label>
+					    <select name="singleSelect" id="singleSelect" ng-model=linkData.relationshipName>
+					      <option ng-repeat="rel in relationships | filter: { src_type: 'contribution', 
+					      													 target_type: 'contribution'}" 
+					      													 value={{rel.name}}>{{rel.name}}</option>
+					    </select>
+
+						<br><br>					    	
+
+
+						<label for="singleSelect"> Target: (related_to)</label>
+					    <select class='replyTo' name="singleSelect" id="singleSelect" ng-model="linkData.target">
+					      <option ng-repeat="contribution in contributions" value={{contribution.id}}>{{contribution.title}} ({{contribution.id}})</option>
+					    </select>
+
+
+				</div>
+
+				<div class='row'>
+				    <div class="col-sm-12">
+				    	<br><br><br>
+						
+						<span><b> Request Data:  </b></span> 
+						<span>{{ linkData }}</span>
+
+						<br><br>
+						<button type="button" class="btn btn-primary pull-right" ng-click='createLink()'>Create Link</button>
+					</div>
+				</div>
+		    </div>
+		</div>
+	</div>
+</div>
